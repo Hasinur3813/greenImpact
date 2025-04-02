@@ -1,24 +1,49 @@
-import { useRef, useState } from "react";
-import { NavLink, Link } from "react-router"; // Fixed import to `react-router-dom`
-import { FiMenu, FiX, FiUser } from "react-icons/fi"; // Add icon for user avatar
-import { FaSignInAlt } from "react-icons/fa"; // Sign-in icon for Login button
+import { useEffect, useRef, useState } from "react";
+import { NavLink, Link } from "react-router";
+import { FiMenu, FiX } from "react-icons/fi";
+import { FaSignInAlt } from "react-icons/fa";
+import DropdownMenu from "../DropdownMenu/DropdownMenu";
+import AuthModal from "../AuthModal/AuthModal";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [state, setState] = useState({
+    isOpenMobileMenu: false,
+    isDropdownOpen: false,
+    openAuthModal: false,
+  });
+
+  const currentUser: boolean = false;
+
   const DropdownRef = useRef(null);
+  // Function to update state properties
+  const updateState = (key: string, value: boolean) => {
+    setState((prevState) => ({ ...prevState, [key]: value }));
+  };
 
   // Sample user data, you can replace it with actual user state
   const user = { name: "John Doe", avatar: "/path-to-avatar.jpg" };
 
-  const handleCloseDropdownMenu = () => {
-    console.log("close menu");
-  };
+  // Close dropdown menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        DropdownRef.current &&
+        !(DropdownRef.current as HTMLElement).contains(event.target as Node)
+      ) {
+        updateState("isDropdownOpen", !state.isDropdownOpen);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [state.isDropdownOpen]);
   return (
     <nav className="bg-offWhite shadow-md py-5 sticky top-0 z-50">
       <div className="container mx-auto flex px-4 justify-between items-center">
+        {/* auth modal */}
+        {state.openAuthModal && <AuthModal updateState={updateState} />}
         {/* Logo */}
         <Link to="/" className="text-3xl font-bold text-primaryColor">
           GreenImpact
@@ -26,16 +51,18 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() =>
+            updateState("isOpenMobileMenu", !state.isOpenMobileMenu)
+          }
           className="md:hidden text-darkGray focus:outline-none text-2xl"
         >
-          {isOpen ? <FiX /> : <FiMenu />}
+          {state.isOpenMobileMenu ? <FiX /> : <FiMenu />}
         </button>
 
         {/* Menu Items */}
         <ul
           className={`md:flex md:space-x-6 items-center absolute md:static top-16 left-0 w-full md:w-auto bg-offWhite md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300 ease-in-out ${
-            isOpen ? "block" : "hidden"
+            state.isOpenMobileMenu ? "block" : "hidden"
           }`}
         >
           <li>
@@ -80,19 +107,24 @@ export default function Navbar() {
           </li>
 
           {/* Conditionally render Login or Avatar */}
-          {!isLoggedIn ? (
+          {!currentUser ? (
             <li>
-              <NavLink
-                to="/login"
+              <button
+                onClick={() =>
+                  updateState("openAuthModal", !state.openAuthModal)
+                }
+                type="button"
                 className="flex items-center text-lg text-white bg-primaryColor hover:bg-accentColor py-2 px-4 rounded-full transition font-semibold"
               >
                 <FaSignInAlt className="mr-2" /> Login
-              </NavLink>
+              </button>
             </li>
           ) : (
             <li className="relative">
               <button
-                onClick={() => handleCloseDropdownMenu}
+                onClick={() =>
+                  updateState("isDropdownOpen", !state.isDropdownOpen)
+                }
                 className="flex items-center cursor-pointer space-x-2 "
               >
                 <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
@@ -103,39 +135,8 @@ export default function Navbar() {
               </button>
 
               {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <ul
-                  ref={DropdownRef}
-                  className="absolute top-12 right-0 bg-white shadow-lg rounded-lg w-40 mt-4 space-y-2 py-4"
-                >
-                  <li>
-                    <NavLink
-                      to="/profile"
-                      className="block text-lg text-text hover:text-primaryColor transition px-4 "
-                    >
-                      Profile
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/settings"
-                      className="block text-lg text-text hover:text-primaryColor transition px-4 "
-                    >
-                      Settings
-                    </NavLink>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        setIsLoggedIn(false);
-                        setIsDropdownOpen(false);
-                      }}
-                      className="text-lg text-red-500 hover:text-primaryColor transition px-4  w-full text-left"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
+              {state.isDropdownOpen && (
+                <DropdownMenu DropdownRef={DropdownRef} />
               )}
             </li>
           )}
