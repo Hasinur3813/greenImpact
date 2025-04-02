@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primaryColor: #24c700; /* Forest Green – Main Theme */
+  --color-secondaryColor: #a7c957; /* Lime Green – Highlights & Accents */
+  --color-offWhite: #f8f9fa; /* Soft White – Background */
+  --color-darkGray: #0f172a; /* Deep Gray – Navbar, Footer */
+  --color-lightGray: #f7f7f7; /* Light Gray – Section Background */
+  --color-muted: #4b5563; /* Muted Gray – Secondary Text */
+  --color-text: #101c2c; /* Primary Text Color */
+  --color-red: #ef4444; /* Red – Alerts, Warnings */
+  --color-accent-hover: #e5ffff; /* Soft Blue – Interactive Hover */
+  --color-bg-secondary: #e6fbfb; /* Light Teal – Secondary Background */
+}
