@@ -12,7 +12,8 @@ export default function Navbar() {
     openAuthModal: false,
   });
 
-  const currentUser: boolean = false;
+  const currentUser: boolean = true;
+  const role = "donor";
 
   const DropdownRef = useRef(null);
   // Function to update state properties
@@ -136,7 +137,7 @@ export default function Navbar() {
 
               {/* Dropdown Menu */}
               {state.isDropdownOpen && (
-                <DropdownMenu DropdownRef={DropdownRef} />
+                <DropdownMenu DropdownRef={DropdownRef} role={role} />
               )}
             </li>
           )}
