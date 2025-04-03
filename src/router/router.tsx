@@ -13,6 +13,8 @@ import ManageUsers from "../pages/ManageUsers/ManageUsers";
 import EventManagement from "../pages/EventManagement/EventManagement";
 import Donations from "../pages/Donations/Donations";
 import ReportsAnalytics from "../pages/ReportsAnalytics/ReportsAnalytics";
+import Events from "../pages/Events/Events";
+import Aboutus from "../pages/AboutUs/AboutUs";
 
 // Role-based route wrapper
 const RoleBasedRoute = ({ element, allowedRoles, userRole }: any) => {
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/events",
+        element: <Events />,
+      },
+      {
+        path: "/about",
+        element: <Aboutus />,
       },
     ],
   },

@@ -69,7 +69,13 @@ export default function Navbar() {
           <li>
             <NavLink
               to="/"
-              className="text-lg text-text hover:text-primaryColor transition font-semibold"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
             >
               Home
             </NavLink>
@@ -77,7 +83,13 @@ export default function Navbar() {
           <li>
             <NavLink
               to="/about"
-              className="text-lg text-text hover:text-primaryColor transition font-semibold"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
             >
               About
             </NavLink>
@@ -85,7 +97,13 @@ export default function Navbar() {
           <li>
             <NavLink
               to="/events"
-              className="text-lg text-text hover:text-primaryColor transition font-semibold"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
             >
               Events
             </NavLink>
@@ -93,7 +111,13 @@ export default function Navbar() {
           <li>
             <NavLink
               to="/donate"
-              className="text-lg text-text hover:text-primaryColor transition font-semibold"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
             >
               Donate
             </NavLink>
@@ -101,7 +125,13 @@ export default function Navbar() {
           <li>
             <NavLink
               to="/contact"
-              className="text-lg text-text hover:text-primaryColor transition font-semibold"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
             >
               Contact
             </NavLink>

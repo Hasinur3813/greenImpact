@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "title": "Tree Plantation Drive",
+    "description": "Join us in planting trees to combat climate change and improve air quality.",
+    "date": "2025-04-15",
+    "time": "10:00 AM - 2:00 PM",
+    "location": "Central Park, New York",
+    "organizer": "GreenImpact Team",
+    "volunteersNeeded": 20,
+    "volunteersJoined": 12,
+    "status": "Upcoming",
+    "image": "https://i.ibb.co.com/FBCc8sF/blanket-2.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Beach Cleanup Initiative",
+    "description": "Help us remove plastic waste from the beach and protect marine life.",
+    "date": "2025-04-20",
+    "time": "8:00 AM - 12:00 PM",
+    "location": "Venice Beach, California",
+    "organizer": "GreenImpact Volunteers",
+    "volunteersNeeded": 30,
+    "volunteersJoined": 18,
+    "status": "Upcoming",
+    "image": "https://i.ibb.co.com/FBCc8sF/blanket-2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Renewable Energy Awareness Campaign",
+    "description": "Educating communities about the benefits of solar and wind energy.",
+    "date": "2025-04-25",
+    "time": "5:00 PM - 7:00 PM",
+    "location": "Downtown Hall, Chicago",
+    "organizer": "Green Future Initiative",
+    "volunteersNeeded": 15,
+    "volunteersJoined": 10,
+    "status": "Upcoming",
+    "image": "https://i.ibb.co.com/FBCc8sF/blanket-2.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Community Gardening Project",
+    "description": "Creating sustainable gardens for local communities to grow fresh produce.",
+    "date": "2025-05-05",
+    "time": "9:00 AM - 1:00 PM",
+    "location": "Sunset Community Center, Florida",
+    "organizer": "GreenImpact & Local Farmers",
+    "volunteersNeeded": 25,
+    "volunteersJoined": 14,
+    "status": "Upcoming",
+    "image": "https://i.ibb.co.com/FBCc8sF/blanket-2.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Eco-Friendly Workshop",
+    "description": "Teaching sustainable habits and DIY eco-friendly products.",
+    "date": "2025-05-10",
+    "time": "3:00 PM - 6:00 PM",
+    "location": "City Library, San Francisco",
+    "organizer": "EcoMind & GreenImpact",
+    "volunteersNeeded": 10,
+    "volunteersJoined": 7,
+    "status": "Upcoming",
+    "image": "https://i.ibb.co.com/FBCc8sF/blanket-2.jpg"
+  }
+]

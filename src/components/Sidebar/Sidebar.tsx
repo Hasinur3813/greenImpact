@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* donor route */}
           {role === "donor" && (
             <>
-              <ListItem path="/dashboard/my-donation">My Donation</ListItem>
+              <ListItem path="/dashboard">My Donation</ListItem>
               <ListItem path="/dashboard/donate-now">Donate Now</ListItem>
               <ListItem path="/dashboard/transaction-history">
                 Transaction History
@@ -64,9 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* volunteer route */}
           {role === "volunteer" && (
             <>
-              <ListItem path="/dashboard/available-events">
-                Available Events
-              </ListItem>
+              <ListItem path="/dashboard">Available Events</ListItem>
               <ListItem path="/dashboard/my-assigned-events">
                 My Assinged Events
               </ListItem>
@@ -78,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* admin route */}
           {role === "admin" && (
             <>
-              <ListItem path="/dashboard/overview">Overview</ListItem>
+              <ListItem path="/dashboard">Overview</ListItem>
               <ListItem path="/dashboard/manage-users">Manage Users</ListItem>
               <ListItem path="/dashboard/event-management">
                 Event Management
