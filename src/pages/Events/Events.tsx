@@ -1,22 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import EventCard from "../../components/EventCard/EventCard";
 import { Event } from "../../Types/Event";
-
-const fetchEvents = async () => {
-  const { data } = await axios.get("/api/events.json");
-  return data;
-};
+import useEvents from "../../hooks/useEvents";
 
 const Events = () => {
-  const {
-    data: events,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["events"],
-    queryFn: fetchEvents,
-  });
+  const { events, isLoading, error } = useEvents();
 
   type userRoleType = "donor" | "volunteer" | "admin";
 

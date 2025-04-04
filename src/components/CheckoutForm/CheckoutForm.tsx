@@ -17,8 +17,6 @@ const CheckoutForm: React.FC<{ amount: number }> = ({ amount }) => {
     });
     if (!error && paymentMethod) {
       alert(`Payment successful!`);
-
-      // ✅ Reset card input
       const cardElement = elements.getElement(CardElement);
       cardElement?.clear();
     }

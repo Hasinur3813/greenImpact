@@ -10,7 +10,7 @@ interface EventType {
 
 const EventCard: React.FC<EventType> = ({ event, userRole }) => {
   return (
-    <div className="bg-white shadow-lg rounded-2xl p-5 flex flex-col space-y-3 hover:shadow-xl transition duration-300">
+    <div className="bg-white h-full shadow-lg rounded-2xl p-5 flex flex-col space-y-3 hover:shadow-xl transition duration-300">
       {/* Event Image */}
       <img
         src={event.image}
