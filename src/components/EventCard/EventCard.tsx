@@ -1,6 +1,7 @@
 import React from "react";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
 import { Event } from "../../Types/Event";
+import { Link } from "react-router";
 
 interface EventType {
   event: Event;
@@ -53,12 +54,14 @@ const EventCard: React.FC<EventType> = ({ event, userRole }) => {
             Join Now
           </button>
         )}
-        <button
-          type="button"
-          className="bg-red-500 cursor-pointer text-white  px-4 py-2 rounded-lg hover:bg-red-600 transition"
-        >
-          Donate
-        </button>
+        <Link to="/donate">
+          <button
+            type="button"
+            className="bg-red-500 cursor-pointer text-white  px-4 py-2 rounded-lg hover:bg-red-600 transition"
+          >
+            Donate
+          </button>
+        </Link>
       </div>
     </div>
   );

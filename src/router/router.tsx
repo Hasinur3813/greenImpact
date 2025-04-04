@@ -15,6 +15,7 @@ import Donations from "../pages/Donations/Donations";
 import ReportsAnalytics from "../pages/ReportsAnalytics/ReportsAnalytics";
 import Events from "../pages/Events/Events";
 import Aboutus from "../pages/AboutUs/AboutUs";
+import Donate from "../pages/Donate/Donate";
 
 // Role-based route wrapper
 const RoleBasedRoute = ({ element, allowedRoles, userRole }: any) => {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: <Aboutus />,
+      },
+      {
+        path: "/donate",
+        element: <Donate />,
       },
     ],
   },
