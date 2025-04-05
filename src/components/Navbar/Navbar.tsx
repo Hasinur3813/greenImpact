@@ -6,9 +6,15 @@ import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import AuthModal from "../AuthModal/AuthModal";
 import { useAuth } from "../../contexts/AuthProvider";
 
+interface dropDownState {
+  isOpenMobileMenu: boolean;
+  isDropdownOpen: boolean;
+  openAuthModal: boolean;
+}
+
 export default function Navbar() {
   const { user: currentUser } = useAuth();
-  const [state, setState] = useState({
+  const [state, setState] = useState<dropDownState>({
     isOpenMobileMenu: false,
     isDropdownOpen: false,
     openAuthModal: false,
@@ -170,6 +176,7 @@ export default function Navbar() {
               {/* Dropdown Menu */}
               {state.isDropdownOpen && (
                 <DropdownMenu
+                  setState={setState}
                   DropdownRef={DropdownRef}
                   role={currentUser?.role}
                 />

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 interface loginData {
   email: string;
   password: string;
@@ -92,11 +93,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logout = async () => {
-    await fetch("http://localhost:5000/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    setUser(null);
+    const { data } = await axios.get("/auth/logout");
+    if (data.success) {
+      setUser(null);
+      toast.success("You have successfully logged out!");
+    } else {
+      toast.error("Something went wrong!");
+    }
   };
 
   return (

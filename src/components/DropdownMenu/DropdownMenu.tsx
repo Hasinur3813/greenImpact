@@ -1,12 +1,31 @@
 import React from "react";
 import ListItem from "../ListItem/ListItem";
+import { useAuth } from "../../contexts/AuthProvider";
+import { FiLogOut } from "react-icons/fi";
+
+interface dropDownState {
+  isOpenMobileMenu: boolean;
+  isDropdownOpen: boolean;
+  openAuthModal: boolean;
+}
 
 interface DropdownProps {
   DropdownRef: React.RefObject<HTMLUListElement> | React.RefObject<null>;
   role: string;
+  setState: React.Dispatch<React.SetStateAction<dropDownState>>;
 }
 
-const DropdownMenu: React.FC<DropdownProps> = ({ DropdownRef, role }) => {
+const DropdownMenu: React.FC<DropdownProps> = ({
+  DropdownRef,
+  role,
+  setState,
+}) => {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    setState((prevState) => ({ ...prevState, isDropdownOpen: false }));
+  };
   return (
     <ul
       ref={DropdownRef}
@@ -53,6 +72,15 @@ const DropdownMenu: React.FC<DropdownProps> = ({ DropdownRef, role }) => {
           </ListItem>
         </>
       )}
+      <div className="w-full flex justify-center">
+        <button
+          onClick={handleLogout}
+          type="button"
+          className=" py-2 bg-red-500 hover:bg-red-600 cursor-pointer text-lg font-semibold flex justify-center items-center gap-2 rounded-lg w-11/12 text-white"
+        >
+          <FiLogOut className="text-lg" /> Logout
+        </button>
+      </div>
     </ul>
   );
 };

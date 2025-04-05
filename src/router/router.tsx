@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, useNavigate } from "react-router";
 import MainLayout from "../layout/MainLayout";
 import HomePage from "../pages/HomePage";
 import DashboardLayout from "../layout/DashboardLayout";
@@ -17,17 +17,7 @@ import Events from "../pages/Events/Events";
 import Aboutus from "../pages/AboutUs/AboutUs";
 import Donate from "../pages/Donate/Donate";
 import Contact from "../pages/Contact/Contact";
-
-// Role-based route wrapper
-const RoleBasedRoute = ({ element, allowedRoles, userRole }: any) => {
-  return allowedRoles.includes(userRole) ? element : <div>Access Denied</div>;
-};
-
-// Example user role (replace this with actual user role from context or state)
-const userRole: "donor" | "volunteer" | "admin" = "donor" as
-  | "donor"
-  | "volunteer"
-  | "admin"; // Example: "donor", "volunteer", or "admin"
+import MyProfile from "../pages/MyProfile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -56,129 +46,62 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // dashboard layout
   {
     path: "dashboard",
     element: <DashboardLayout />,
     children: [
       {
         path: "",
-        element: (() => {
-          switch (userRole) {
-            case "donor":
-              return (
-                <RoleBasedRoute
-                  element={<MyDonations />}
-                  allowedRoles={["donor"]}
-                  userRole={userRole}
-                />
-              );
-            case "volunteer":
-              return (
-                <RoleBasedRoute
-                  element={<AvailableEvents />}
-                  allowedRoles={["volunteer"]}
-                  userRole={userRole}
-                />
-              );
-            case "admin":
-              return (
-                <RoleBasedRoute
-                  element={<Overview />}
-                  allowedRoles={["admin"]}
-                  userRole={userRole}
-                />
-              );
-            default:
-              return <div>Access Denied</div>;
-          }
-        })(),
+        element: <MyProfile />,
       },
       // Donor routes
       {
         path: "donate-now",
-        element: (
-          <RoleBasedRoute
-            element={<DonateNow />}
-            allowedRoles={["donor"]}
-            userRole={userRole}
-          />
-        ),
+        element: <DonateNow />,
+      },
+      {
+        path: "my-donation",
+        element: <MyDonations />,
       },
       {
         path: "transaction-history",
-        element: (
-          <RoleBasedRoute
-            element={<TransactionHistory />}
-            allowedRoles={["donor"]}
-            userRole={userRole}
-          />
-        ),
+        element: <TransactionHistory />,
       },
 
       // Volunteer routes
 
       {
         path: "my-assigned-events",
-        element: (
-          <RoleBasedRoute
-            element={<MyAssignedEvents />}
-            allowedRoles={["volunteer"]}
-            userRole={userRole}
-          />
-        ),
+        element: <MyAssignedEvents />,
+      },
+      {
+        path: "available-events",
+        element: <AvailableEvents />,
       },
       {
         path: "progress-reports",
-        element: (
-          <RoleBasedRoute
-            element={<ProgressReports />}
-            allowedRoles={["volunteer"]}
-            userRole={userRole}
-          />
-        ),
+        element: <ProgressReports />,
       },
 
       // Admin routes
 
       {
         path: "manage-users",
-        element: (
-          <RoleBasedRoute
-            element={<ManageUsers />}
-            allowedRoles={["admin"]}
-            userRole={userRole}
-          />
-        ),
+        element: <ManageUsers />,
       },
       {
         path: "event-management",
-        element: (
-          <RoleBasedRoute
-            element={<EventManagement />}
-            allowedRoles={["admin"]}
-            userRole={userRole}
-          />
-        ),
+        element: <EventManagement />,
       },
       {
         path: "donations",
-        element: (
-          <RoleBasedRoute
-            element={<Donations />}
-            allowedRoles={["admin"]}
-            userRole={userRole}
-          />
-        ),
+        element: <Donations />,
       },
       {
         path: "reports&analytics",
-        element: (
-          <RoleBasedRoute
-            element={<ReportsAnalytics />}
-            allowedRoles={["admin"]}
-            userRole={userRole}
-          />
-        ),
+        element: <ReportsAnalytics />,
       },
     ],
   },

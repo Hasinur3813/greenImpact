@@ -29,14 +29,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
   const handleLogin = async (data: loginData) => {
     try {
       const response = await login(data);
-      console.log(response);
       if (response?.success) {
         toast.success("Successfully Logged In");
       } else {
         toast.error("Invalid Credentials!");
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       toast.error("Invalid Credentials!");
     }
   };
@@ -58,7 +56,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[90]">
       {/* Modal Container */}
-      <div className="bg-white w-[90%] max-w-md p-6 rounded-lg shadow-lg relative overflow-hidden">
+      <div className="bg-white w-[90%] overflow-y-auto max-w-md p-6 rounded-lg shadow-lg relative overflow-x-hidden">
         {/* Close Button */}
         <button
           className="absolute top-1 right-1 cursor-pointer text-gray-500 hover:text-gray-800"
@@ -95,7 +93,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
         </div>
 
         {/* Form Container */}
-        <div className="relative min-h-[400px] h-full overflow-hidden">
+        <div className="relative min-h-[500px] h-full overflow-hidden">
           <div
             className={`absolute inset-0 items-center flex transition-transform duration-700 ${
               isRegister ? "-translate-x-full" : "translate-x-0"

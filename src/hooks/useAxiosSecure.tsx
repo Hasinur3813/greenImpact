@@ -19,11 +19,7 @@ const useAxiosSecure = () => {
           error.response &&
           (error.response.status === 401 || error.response.status === 403)
         ) {
-          console.log(
-            "unauthorized or forbidden request",
-            error.response.status
-          );
-          // remove token from cookies by api calling
+          await axios.get("/auth/logout");
         }
         return Promise.reject(error);
       }

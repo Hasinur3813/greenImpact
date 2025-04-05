@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { useAuth } from "../contexts/AuthProvider";
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
-  const role = "donor";
+  const { user } = useAuth();
 
   // Close sidebar on mobile devices
   useEffect(() => {
@@ -23,7 +24,7 @@ const DashboardLayout = () => {
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        role={role}
+        role={user?.role}
       />
 
       {/* Main Content */}
