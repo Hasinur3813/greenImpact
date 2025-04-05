@@ -1,15 +1,18 @@
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 
 interface FormProps {
   role: string;
   setRole: (value: string) => void;
   handleRegister: (data: registerData) => void;
 }
+
 interface registerData {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   role: string;
 }
 
@@ -18,23 +21,28 @@ const RegisterForm: React.FC<FormProps> = ({
   setRole,
   handleRegister,
 }) => {
-  // React Hook Form
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<registerData>(); // Added generic type for useForm
+  } = useForm<registerData>();
 
-  // Form Submit Handler
   const onSubmit = (data: registerData) => {
     handleRegister(data);
   };
 
+  const password = watch("password");
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full shrink-0  space-y-4 transition-opacity"
+      className="w-full shrink-0 space-y-4 transition-opacity"
     >
+      {/* Name */}
       <div className="flex items-center border rounded-lg px-3 py-2">
         <FaUser className="text-gray-400 mr-2" />
         <input
@@ -46,6 +54,7 @@ const RegisterForm: React.FC<FormProps> = ({
       </div>
       {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
+      {/* Email */}
       <div className="flex items-center border rounded-lg px-3 py-2">
         <FaEnvelope className="text-gray-400 mr-2" />
         <input
@@ -63,7 +72,8 @@ const RegisterForm: React.FC<FormProps> = ({
       </div>
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-      <div className="flex items-center border rounded-lg px-3 py-2">
+      {/* Password */}
+      <div className="flex items-center border rounded-lg px-3 py-2 relative">
         <FaLock className="text-gray-400 mr-2" />
         <input
           {...register("password", {
@@ -73,13 +83,42 @@ const RegisterForm: React.FC<FormProps> = ({
               message: "Minimum 6 characters required",
             },
           })}
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
-          className="w-full outline-none"
+          className="w-full outline-none pr-8"
         />
+        <span
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 text-gray-400 cursor-pointer"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </span>
       </div>
       {errors.password && (
         <p className="text-red-500">{errors.password.message}</p>
+      )}
+
+      {/* Confirm Password */}
+      <div className="flex items-center border rounded-lg px-3 py-2 relative">
+        <FaLock className="text-gray-400 mr-2" />
+        <input
+          {...register("confirmPassword", {
+            required: "Confirm your password",
+            validate: (value) => value === password || "Passwords do not match",
+          })}
+          type={showConfirm ? "text" : "password"}
+          placeholder="Confirm Password"
+          className="w-full outline-none pr-8"
+        />
+        <span
+          onClick={() => setShowConfirm(!showConfirm)}
+          className="absolute right-3 text-gray-400 cursor-pointer"
+        >
+          {showConfirm ? <FaEyeSlash /> : <FaEye />}
+        </span>
+      </div>
+      {errors.confirmPassword && (
+        <p className="text-red-500">{errors.confirmPassword.message}</p>
       )}
 
       {/* Role Selection */}

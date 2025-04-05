@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoIosCloseCircle } from "react-icons/io";
 import LoginForm from "../LoginForm/LoginForm";
 import RegisterForm from "../RegisterForm/RegisterForm";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 interface AuthModalProps {
   updateState: (key: string, value: boolean) => void;
@@ -21,13 +22,20 @@ interface registerData {
 const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
   const [isRegister, setIsRegister] = useState(false);
   const [role, setRole] = useState("volunteer");
+  const axios = useAxiosPublic();
 
-  const handleLogin = (data: loginData) => {
-    console.log(data);
+  const handleLogin = async (data: loginData) => {
+    const user = data;
+
+    const response = await axios.post("/auth/login", user);
+    console.log(response.data);
   };
 
-  const handleRegister = (data: registerData) => {
-    console.log(data);
+  const handleRegister = async (data: registerData) => {
+    const user = data;
+
+    const response = await axios.post("/auth/register", user);
+    console.log(response.data);
   };
 
   return (

@@ -12,7 +12,7 @@ export default function Navbar() {
     openAuthModal: false,
   });
 
-  const currentUser: boolean = true;
+  const currentUser: boolean = false;
   const role = "donor";
 
   const DropdownRef = useRef(null);
