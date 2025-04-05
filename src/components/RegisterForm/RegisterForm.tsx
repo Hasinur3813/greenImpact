@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthProvider";
 
 interface FormProps {
   role: string;
@@ -21,6 +22,7 @@ const RegisterForm: React.FC<FormProps> = ({
   setRole,
   handleRegister,
 }) => {
+  const { loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -150,7 +152,7 @@ const RegisterForm: React.FC<FormProps> = ({
         type="submit"
         className="w-full cursor-pointer bg-primaryColor hover:bg-secondaryColor text-white py-2 rounded-lg font-semibold"
       >
-        Register
+        {loading ? "Registering..." : "Register"}
       </button>
     </form>
   );

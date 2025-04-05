@@ -1,10 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+interface loginData {
+  email: string;
+  password: string;
+}
 interface User {
-  id: string;
   name: string;
   email: string;
-  role: "volunteer" | "donor" | "admin";
+  password: string;
+  confirmPassword: string;
+  role: string;
 }
 
 interface AuthContextProps {
@@ -12,6 +18,8 @@ interface AuthContextProps {
   loading: boolean;
   setUser: (user: User | null) => void;
   logout: () => Promise<void>;
+  register: (userData: User) => Promise<void>;
+  login: (userData: loginData) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -19,6 +27,8 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const axios = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,17 +36,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
-          credentials: "include",
-        });
+        const res = await axiosSecure.get("/auth/user/me");
 
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
+        if (res.data.success) {
+          setUser(res.data.data.user);
         } else {
           setUser(null);
         }
-      } catch (err) {
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);
@@ -44,7 +51,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchUser();
-  }, []);
+  }, [axiosSecure]);
+
+  const register = async (userData: User) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/auth/register", userData);
+      if (data.success) {
+        setUser(data.data.user);
+        return data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || error.message || "Registration failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const login = async (userData: loginData) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/auth/login", userData);
+      if (data.success) {
+        setUser(data.data.user);
+        return data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || error.message || "Registration failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const logout = async () => {
     await fetch("http://localhost:5000/api/auth/logout", {
@@ -55,7 +100,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, setUser, logout, loading, register, login }}
+    >
       {children}
     </AuthContext.Provider>
   );

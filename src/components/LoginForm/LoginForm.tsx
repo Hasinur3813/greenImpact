@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useAuth } from "../../contexts/AuthProvider";
 
 interface LoginProps {
   handleLogin: (data: loginData) => void;
@@ -11,6 +12,7 @@ interface loginData {
 }
 
 const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
+  const { loading } = useAuth();
   // React Hook Form
   const {
     register,
@@ -69,7 +71,7 @@ const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
         type="submit"
         className="w-full cursor-pointer bg-primaryColor hover:bg-secondaryColor text-white py-2 rounded-lg font-semibold"
       >
-        Login
+        {loading ? "Logging in..." : "Log In"}
       </button>
     </form>
   );

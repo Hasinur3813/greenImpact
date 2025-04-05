@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { IoIosCloseCircle } from "react-icons/io";
 import LoginForm from "../LoginForm/LoginForm";
 import RegisterForm from "../RegisterForm/RegisterForm";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useAuth } from "../../contexts/AuthProvider";
+import { toast } from "react-hot-toast";
 
 interface AuthModalProps {
   updateState: (key: string, value: boolean) => void;
@@ -16,26 +17,42 @@ interface registerData {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   role: string;
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
-  const [isRegister, setIsRegister] = useState(false);
-  const [role, setRole] = useState("volunteer");
-  const axios = useAxiosPublic();
+  const { register, login } = useAuth();
+  const [isRegister, setIsRegister] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("volunteer");
 
   const handleLogin = async (data: loginData) => {
-    const user = data;
-
-    const response = await axios.post("/auth/login", user);
-    console.log(response.data);
+    try {
+      const response = await login(data);
+      console.log(response);
+      if (response?.success) {
+        toast.success("Successfully Logged In");
+      } else {
+        toast.error("Invalid Credentials!");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Invalid Credentials!");
+    }
   };
 
   const handleRegister = async (data: registerData) => {
-    const user = data;
-
-    const response = await axios.post("/auth/register", user);
-    console.log(response.data);
+    try {
+      const response = await register(data);
+      if (response?.success) {
+        toast.success("Registration successful");
+      } else {
+        toast.error("Registration Failed!");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Registration Failed!");
+    }
   };
 
   return (

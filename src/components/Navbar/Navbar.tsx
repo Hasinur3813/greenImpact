@@ -4,25 +4,27 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { FaSignInAlt } from "react-icons/fa";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import AuthModal from "../AuthModal/AuthModal";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function Navbar() {
+  const { user: currentUser } = useAuth();
   const [state, setState] = useState({
     isOpenMobileMenu: false,
     isDropdownOpen: false,
     openAuthModal: false,
   });
 
-  const currentUser: boolean = false;
-  const role = "donor";
+  useEffect(() => {
+    if (currentUser) {
+      setState((preveState) => ({ ...preveState, openAuthModal: false }));
+    }
+  }, [currentUser]);
 
   const DropdownRef = useRef(null);
   // Function to update state properties
   const updateState = (key: string, value: boolean) => {
     setState((prevState) => ({ ...prevState, [key]: value }));
   };
-
-  // Sample user data, you can replace it with actual user state
-  const user = { name: "John Doe", avatar: "/path-to-avatar.jpg" };
 
   // Close dropdown menu when clicking outside
   useEffect(() => {
@@ -145,7 +147,7 @@ export default function Navbar() {
                   updateState("openAuthModal", !state.openAuthModal)
                 }
                 type="button"
-                className="flex items-center text-lg text-white bg-primaryColor hover:bg-accentColor py-2 px-4 rounded-full transition font-semibold"
+                className="flex items-center cursor-pointer text-lg text-white bg-primaryColor hover:bg-accentColor py-2 px-4 rounded-full transition font-semibold"
               >
                 <FaSignInAlt className="mr-2" /> Login
               </button>
@@ -160,14 +162,17 @@ export default function Navbar() {
               >
                 <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
                   <span className="font-medium text-3xl text-primaryColor">
-                    {user.name.slice(0, 1)}
+                    {currentUser.name.slice(0, 1)}
                   </span>
                 </div>
               </button>
 
               {/* Dropdown Menu */}
               {state.isDropdownOpen && (
-                <DropdownMenu DropdownRef={DropdownRef} role={role} />
+                <DropdownMenu
+                  DropdownRef={DropdownRef}
+                  role={currentUser?.role}
+                />
               )}
             </li>
           )}
