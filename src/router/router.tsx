@@ -1,4 +1,4 @@
-import { createBrowserRouter, useNavigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import MainLayout from "../layout/MainLayout";
 import HomePage from "../pages/HomePage";
 import DashboardLayout from "../layout/DashboardLayout";
@@ -87,6 +87,10 @@ export const router = createBrowserRouter([
 
       // Admin routes
 
+      {
+        path: "overview",
+        element: <Overview />,
+      },
       {
         path: "manage-users",
         element: <ManageUsers />,
