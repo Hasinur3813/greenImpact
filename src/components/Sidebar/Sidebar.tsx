@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {role === "donor" && (
             <>
               <ListItem path="/dashboard/my-donation">My Donation</ListItem>
-              <ListItem path="/dashboard/donate-now">Donate Now</ListItem>
+              <ListItem path="/donate">Donate Now</ListItem>
               <ListItem path="/dashboard/transaction-history">
                 Transaction History
               </ListItem>
