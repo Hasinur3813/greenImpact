@@ -18,10 +18,14 @@ import Aboutus from "../pages/AboutUs/AboutUs";
 import Donate from "../pages/Donate/Donate";
 import Contact from "../pages/Contact/Contact";
 import MyProfile from "../pages/MyProfile/MyProfile";
+import PrivateRoute from "./PrivateRoute";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import RoleBaseRoute from "./RoleBaseRoute";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <ErrorPage />,
     element: <MainLayout />,
     children: [
       {
@@ -50,7 +54,11 @@ export const router = createBrowserRouter([
   // dashboard layout
   {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "",
@@ -59,53 +67,97 @@ export const router = createBrowserRouter([
       // Donor routes
       {
         path: "donate-now",
-        element: <DonateNow />,
+        element: (
+          <RoleBaseRoute allowedRole="donor">
+            <DonateNow />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "my-donation",
-        element: <MyDonations />,
+        element: (
+          <RoleBaseRoute allowedRole="donor">
+            <MyDonations />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "transaction-history",
-        element: <TransactionHistory />,
+        element: (
+          <RoleBaseRoute allowedRole="donor">
+            <TransactionHistory />
+          </RoleBaseRoute>
+        ),
       },
 
       // Volunteer routes
 
       {
         path: "my-assigned-events",
-        element: <MyAssignedEvents />,
+        element: (
+          <RoleBaseRoute allowedRole="volunteer">
+            <MyAssignedEvents />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "available-events",
-        element: <AvailableEvents />,
+        element: (
+          <RoleBaseRoute allowedRole="volunteer">
+            <AvailableEvents />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "progress-reports",
-        element: <ProgressReports />,
+        element: (
+          <RoleBaseRoute allowedRole="volunteer">
+            <ProgressReports />
+          </RoleBaseRoute>
+        ),
       },
 
       // Admin routes
 
       {
         path: "overview",
-        element: <Overview />,
+        element: (
+          <RoleBaseRoute allowedRole="admin">
+            <Overview />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "manage-users",
-        element: <ManageUsers />,
+        element: (
+          <RoleBaseRoute allowedRole="admin">
+            <ManageUsers />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "event-management",
-        element: <EventManagement />,
+        element: (
+          <RoleBaseRoute allowedRole="admin">
+            <EventManagement />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "donations",
-        element: <Donations />,
+        element: (
+          <RoleBaseRoute allowedRole="admin">
+            <Donations />
+          </RoleBaseRoute>
+        ),
       },
       {
         path: "reports&analytics",
-        element: <ReportsAnalytics />,
+        element: (
+          <RoleBaseRoute allowedRole="admin">
+            <ReportsAnalytics />
+          </RoleBaseRoute>
+        ),
       },
     ],
   },

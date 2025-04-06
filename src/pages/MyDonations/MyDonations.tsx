@@ -9,10 +9,6 @@ type Donation = {
   date: string;
 };
 
-type Props = {
-  donations: Donation[];
-  handleClearHistory: () => void;
-};
 const donations = [
   {
     _id: "abc12df3",
@@ -50,7 +46,10 @@ const donations = [
     date: "2025-04-01T12:34:56Z",
   },
 ];
-const MyDonations: React.FC<Props> = ({ handleClearHistory }) => {
+const MyDonations: React.FC = () => {
+  const handleClearHistory = () => {
+    console.log("clear history");
+  };
   return (
     <section className="container mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-primaryColor mb-8 text-center">

@@ -4,6 +4,7 @@ import ListItem from "../ListItem/ListItem";
 import { FiLogOut } from "react-icons/fi";
 import React from "react";
 import { useAuth } from "../../contexts/AuthProvider";
+import toast from "react-hot-toast";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -17,6 +18,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   role,
 }) => {
   const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      toast.error("Something went wrong!");
+    }
+  };
   return (
     <div
       className={`fixed z-50 w-64 top-0 left-0 h-full bg-offWhite dark:bg-slate-800 shadow-sm dark:border-none p-4 transform ${
@@ -100,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </ul>
         <div className="grow flex items-end pb-20 justify-center">
           <button
-            onClick={async () => await logout()}
+            onClick={handleLogout}
             className="flex items-center w-full justify-center cursor-pointer gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-300 shadow-md"
           >
             <FiLogOut className="text-lg" />
