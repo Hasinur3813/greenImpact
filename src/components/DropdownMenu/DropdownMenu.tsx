@@ -27,6 +27,7 @@ const DropdownMenu: React.FC<DropdownProps> = ({
     try {
       await logout();
       setState((prevState) => ({ ...prevState, isDropdownOpen: false }));
+      toast.success("Successfully Logged Out.");
     } catch {
       toast.error("Something went wrong!");
     }

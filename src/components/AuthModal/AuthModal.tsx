@@ -24,7 +24,7 @@ interface registerData {
 const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
   const { register, login } = useAuth();
   const [isRegister, setIsRegister] = useState<boolean>(false);
-  const [role, setRole] = useState<string>("volunteer");
+  const [role, setRole] = useState<string>("donor");
 
   const handleLogin = async (data: loginData) => {
     try {
