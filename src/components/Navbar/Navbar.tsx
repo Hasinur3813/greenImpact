@@ -153,9 +153,10 @@ export default function Navbar() {
                   updateState("openAuthModal", !state.openAuthModal)
                 }
                 type="button"
-                className="flex items-center cursor-pointer text-lg text-white bg-primaryColor hover:bg-accentColor py-2 px-4 rounded-full transition font-semibold"
+                className="flex items-center  cursor-pointer text-lg text-white bg-primaryColor/80 hover:bg-primaryColor py-2 px-4 rounded-full transition font-semibold"
               >
-                <FaSignInAlt className="mr-2" /> Login
+                <FaSignInAlt className="mr-2 animate-pulse" />{" "}
+                <span>Login</span>
               </button>
             </li>
           ) : (

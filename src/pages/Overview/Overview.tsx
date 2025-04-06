@@ -15,6 +15,7 @@ import {
   FaCalendarAlt,
   FaPlus,
   FaUserCog,
+  FaMoneyBillWave,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -55,13 +56,13 @@ const Overview = () => {
   ];
 
   return (
-    <section className="p-6 bg-gray-50 min-h-screen">
+    <section className="p-4 bg-gray-50 min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-primaryColor">
         Admin Overview
       </h2>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         <SummaryCard
           icon={<FaUsers />}
           title="Total Users"
@@ -78,7 +79,7 @@ const Overview = () => {
           value={summaryStats.events}
         />
         <SummaryCard
-          icon={<FaCalendarAlt />}
+          icon={<FaMoneyBillWave />}
           title="Avg Donations"
           value={`$${summaryStats.avgDonation}`}
         />
@@ -113,7 +114,7 @@ const Overview = () => {
                 outerRadius={100}
                 label
               >
-                {roleDistribution.map((entry, index) => (
+                {roleDistribution.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthProvider";
 
 interface LoginProps {
@@ -13,6 +13,7 @@ interface loginData {
 
 const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
   const { loading } = useAuth();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   // React Hook Form
   const {
     register,
@@ -30,7 +31,7 @@ const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full shrink-0 space-y-4 transition-opacity"
     >
-      <div className="flex items-center border rounded-lg px-3 py-2">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2">
         <FaEnvelope className="text-gray-400 mr-2" />
         <input
           {...register("email", {
@@ -47,7 +48,7 @@ const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
       </div>
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-      <div className="flex items-center border rounded-lg px-3 py-2">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2">
         <FaLock className="text-gray-400 mr-2" />
         <input
           {...register("password", {
@@ -57,10 +58,16 @@ const LoginForm: React.FC<LoginProps> = ({ handleLogin }) => {
               message: "Minimum 6 characters required",
             },
           })}
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           className="w-full outline-none"
         />
+        <span
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 text-gray-400 cursor-pointer"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </span>
       </div>
       {errors.password && (
         <p className="text-red-500">{errors.password.message}</p>

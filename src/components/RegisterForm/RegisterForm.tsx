@@ -23,8 +23,8 @@ const RegisterForm: React.FC<FormProps> = ({
   handleRegister,
 }) => {
   const { loading } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const {
     register,
@@ -45,7 +45,7 @@ const RegisterForm: React.FC<FormProps> = ({
       className="w-full shrink-0 space-y-4 transition-opacity"
     >
       {/* Name */}
-      <div className="flex items-center border rounded-lg px-3 py-2">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2">
         <FaUser className="text-gray-400 mr-2" />
         <input
           {...register("name", { required: "Full Name is required" })}
@@ -57,7 +57,7 @@ const RegisterForm: React.FC<FormProps> = ({
       {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
       {/* Email */}
-      <div className="flex items-center border rounded-lg px-3 py-2">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2">
         <FaEnvelope className="text-gray-400 mr-2" />
         <input
           {...register("email", {
@@ -75,7 +75,7 @@ const RegisterForm: React.FC<FormProps> = ({
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
       {/* Password */}
-      <div className="flex items-center border rounded-lg px-3 py-2 relative">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2 relative">
         <FaLock className="text-gray-400 mr-2" />
         <input
           {...register("password", {
@@ -101,7 +101,7 @@ const RegisterForm: React.FC<FormProps> = ({
       )}
 
       {/* Confirm Password */}
-      <div className="flex items-center border rounded-lg px-3 py-2 relative">
+      <div className="flex items-center border border-primaryColor rounded-lg px-3 py-2 relative">
         <FaLock className="text-gray-400 mr-2" />
         <input
           {...register("confirmPassword", {

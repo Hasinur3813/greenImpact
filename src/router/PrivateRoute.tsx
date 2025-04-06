@@ -10,14 +10,14 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!user && !loading) {
-      toast.error("Please log in first!");
+      toast.error("Please log in to access this page!");
       navigate("/");
     }
   }, [user, navigate, loading]);
 
   if (loading) {
     return <Loader />;
-  } else {
+  } else if (!loading && user) {
     return children;
   }
 };
