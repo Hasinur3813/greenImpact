@@ -1,12 +1,11 @@
 export interface Event {
-  id: number;
+  _id?: string;
   title: string;
   description: string;
-  date: string;
   location: string;
   organizer: string;
+  time: string;
   volunteersNeeded: number;
-  volunteersJoined: number;
-  status: string;
+  status?: "upcoming" | "completed" | "cancelled";
   image: string;
 }

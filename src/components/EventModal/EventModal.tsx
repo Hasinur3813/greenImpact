@@ -1,21 +1,23 @@
 import { useForm } from "react-hook-form";
 import { FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { Event } from "../../Types/Event";
 
 interface EventModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: EventFormData) => void;
-  defaultValues?: EventFormData;
+  defaultValues?: Event;
 }
 
-export interface EventFormData {
+interface EventFormData {
   title: string;
   description: string;
-  date: string;
+  organizer: string;
+  time: string;
   location: string;
-  price: number;
-  image?: File | null; // Optional image field
+  volunteersNeeded: number;
+  image?: File | null;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -29,15 +31,13 @@ const EventModal: React.FC<EventModalProps> = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<EventFormData>({
+  } = useForm<Event>({
     defaultValues,
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(
     defaultValues?.image ? URL.createObjectURL(defaultValues.image) : null
   );
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
   useEffect(() => {
     if (defaultValues) reset(defaultValues);
   }, [defaultValues, reset]);
@@ -45,18 +45,30 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file)); // Create a preview URL for the selected image
+      setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleClose = () => {
+    reset();
+    setImagePreview(null);
+    onClose();
+  };
+
+  const handleFormSubmit = (data: EventFormData) => {
+    onSubmit(data);
+    reset();
+    setImagePreview(null);
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl p-6 shadow-lg w-full max-w-xl relative">
+    <div className="fixed inset-0 bg-black/50 z-50 flex overflow-auto pt-20 pb-10  items-center justify-center">
+      <div className="bg-white rounded-2xl p-6 shadow-lg z-[99] w-full max-w-xl relative">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-red-500"
         >
           <FaTimes />
@@ -66,57 +78,87 @@ const EventModal: React.FC<EventModalProps> = ({
           {defaultValues ? "Edit Event" : "Create Event"}
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
-            {...register("title", { required: "Title is required" })}
-            placeholder="Event Title"
-            className="w-full border rounded-lg p-3"
-          />
-          {errors.title && (
-            <p className="text-red-500">{errors.title.message}</p>
-          )}
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-2">
+          {/* title */}
+          <div>
+            <input
+              {...register("title", { required: "Title is required" })}
+              placeholder="Event Title"
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.title && (
+              <p className="text-red-500">{errors.title.message}</p>
+            )}
+          </div>
 
-          <textarea
-            {...register("description", {
-              required: "Description is required",
-            })}
-            placeholder="Event Description"
-            className="w-full border rounded-lg p-3"
-          />
-          {errors.description && (
-            <p className="text-red-500">{errors.description.message}</p>
-          )}
+          {/* description */}
+          <div>
+            <textarea
+              {...register("description", {
+                required: "Description is required",
+              })}
+              placeholder="Event Description"
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.description && (
+              <p className="text-red-500">{errors.description.message}</p>
+            )}
+          </div>
 
-          <input
-            type="date"
-            {...register("date", { required: "Date is required" })}
-            className="w-full border rounded-lg p-3"
-          />
-          {errors.date && <p className="text-red-500">{errors.date.message}</p>}
+          {/* organizer */}
+          <div>
+            <input
+              {...register("organizer", { required: "Organizer is required" })}
+              placeholder="Event organizer"
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.organizer && (
+              <p className="text-red-500">{errors.organizer.message}</p>
+            )}
+          </div>
 
-          <input
-            {...register("location", { required: "Location is required" })}
-            placeholder="Location"
-            className="w-full border rounded-lg p-3"
-          />
-          {errors.location && (
-            <p className="text-red-500">{errors.location.message}</p>
-          )}
+          {/* date */}
+          <div>
+            <input
+              type="time"
+              {...register("time", { required: "Time is required" })}
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.time && (
+              <p className="text-red-500">{errors.time.message}</p>
+            )}
+          </div>
 
-          <input
-            type="number"
-            step="0.01"
-            {...register("price", {
-              required: "Price is required",
-              min: { value: 0, message: "Price must be positive" },
-            })}
-            placeholder="Price (if applicable)"
-            className="w-full border rounded-lg p-3"
-          />
-          {errors.price && (
-            <p className="text-red-500">{errors.price.message}</p>
-          )}
+          {/* location */}
 
+          <div>
+            {" "}
+            <input
+              {...register("location", { required: "Location is required" })}
+              placeholder="Location"
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.location && (
+              <p className="text-red-500">{errors.location.message}</p>
+            )}
+          </div>
+
+          {/* organizer needed */}
+          <div>
+            <input
+              type="number"
+              step="0.01"
+              {...register("volunteersNeeded", {
+                required: "volunteersNeeded is required",
+                min: { value: 0, message: "Value must be positive" },
+              })}
+              placeholder="Volunteers Needed"
+              className="w-full border border-primaryColor rounded-lg p-2"
+            />
+            {errors.volunteersNeeded && (
+              <p className="text-red-500">{errors.volunteersNeeded.message}</p>
+            )}
+          </div>
           {/* Image Upload */}
           <div>
             <input
@@ -124,14 +166,14 @@ const EventModal: React.FC<EventModalProps> = ({
               {...register("image")}
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full border rounded-lg p-3 cursor-pointer"
+              className="w-full border border-primaryColor rounded-lg p-2 cursor-pointer"
             />
             {imagePreview && (
               <div className="mt-4">
                 <img
                   src={imagePreview}
                   alt="Event Preview"
-                  className="w-20 h-14 border border-primaryColor rounded-lg shadow-md"
+                  className="w-20 h-14 border object-cover border-primaryColor rounded-lg shadow-md"
                 />
               </div>
             )}
@@ -139,7 +181,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
           <button
             type="submit"
-            className="w-full bg-primaryColor hover:bg-secondaryColor text-white py-3 rounded-lg font-semibold"
+            className="w-full bg-primaryColor cursor-pointer hover:bg-secondaryColor text-white py-3 rounded-lg font-semibold"
           >
             {defaultValues ? "Update Event" : "Create Event"}
           </button>

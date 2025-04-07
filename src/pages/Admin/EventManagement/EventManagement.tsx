@@ -3,43 +3,46 @@ import { useState } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
 import EventModal from "../../../components/EventModal/EventModal";
-export interface Event {
-  _id: string;
+import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+
+interface EventFormData {
   title: string;
-  date: string;
+  description: string;
+  organizer: string;
+  time: string;
   location: string;
-  status: "upcoming" | "completed" | "cancelled";
+  volunteersNeeded: number;
+  image?: File | null;
 }
+
+// Corrected Event interface
+export interface Event {
+  _id?: string | undefined;
+  title: string;
+  description: string;
+  location: string;
+  organizer: string;
+  time: string;
+  volunteersNeeded: number;
+  image: string;
+  status?: "upcoming" | "completed" | "cancelled";
+}
+
 const dummyEvents: Event[] = [
   {
     _id: "1",
     title: "Tree Plantation Drive",
-    date: "2025-05-10",
+    description: "hjshddhdkdk",
+    time: "2025-05-10",
+    organizer: "ajdhd",
+    volunteersNeeded: 20,
     location: "Dhaka, Bangladesh",
-    status: "upcoming",
-  },
-  {
-    _id: "2",
-    title: "Beach Cleanup",
-    date: "2025-04-15",
-    location: "Cox's Bazar",
-    status: "completed",
-  },
-  {
-    _id: "3",
-    title: "Climate Awareness Campaign",
-    date: "2025-06-01",
-    location: "Chittagong",
+    image: "",
     status: "upcoming",
   },
 ];
-export interface EventFormData {
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  price: number;
-}
+
 interface Column<T> {
   key: keyof T | "actions";
   label: string;
@@ -49,7 +52,8 @@ interface Column<T> {
 const EventManagement = () => {
   const [events, setEvents] = useState<Event[]>(dummyEvents);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [editData, setEditData] = useState<EventFormData | undefined>();
+  const [editData, setEditData] = useState<Event | undefined>();
+  const axiosSecure = useAxiosSecure();
 
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this event?")) {
@@ -58,35 +62,75 @@ const EventManagement = () => {
   };
 
   const handleEdit = (event: Event) => {
-    setEditData({ ...event });
+    // Map `time` to `date` and fix any mismatches for form default values
+    setEditData({
+      title: event.title,
+      description: event.description,
+      location: event.location,
+      organizer: event.organizer,
+      time: event.time,
+      volunteersNeeded: event.volunteersNeeded,
+      image: event.image,
+    });
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (data: EventFormData) => {
-    if (editData) {
-      // Edit logic
-      setEvents((prev) =>
-        prev.map((ev) => (ev._id === editData._id ? { ...ev, ...data } : ev))
-      );
-    } else {
-      // Create logic
-      setEvents((prev) => [
-        ...prev,
-        { ...data, _id: crypto.randomUUID(), status: "upcoming" },
-      ]);
+  const handleSubmit = async (data: EventFormData) => {
+    try {
+      let photoURL = typeof data.image === "string" ? data.image : "";
+
+      if (data.image instanceof FileList && data.image[0]) {
+        const formData = new FormData();
+        formData.append("key", import.meta.env.VITE_IMGBB_API_KEY);
+        formData.append("image", data.image[0]);
+
+        const res = await axios.post(
+          "https://api.imgbb.com/1/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        photoURL = res.data.data.url;
+      }
+
+      const newEvent: Event = {
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        time: data.time,
+        volunteersNeeded: data.volunteersNeeded,
+        image: photoURL,
+        organizer: "GreenImpact Admin", // Or pull from context
+        status: "upcoming",
+      };
+
+      await saveEventToDB(newEvent);
+    } catch (error) {
+      console.error("Error submitting event:", error);
     }
+
     setIsModalOpen(false);
     setEditData(undefined);
   };
 
+  const saveEventToDB = async (event: Event) => {
+    try {
+      const res = await axiosSecure.post("/events", event);
+      console.log(res.data);
+    } catch (error) {
+      console.error("Error saving event to DB:", error);
+    }
+  };
+
   const columns: Column<Event>[] = [
     { key: "title", label: "Title" },
-    { key: "date", label: "Date" },
+    { key: "time", label: "Date" },
     { key: "location", label: "Location" },
     {
       key: "status",
       label: "Status",
-      render: (row: Event) => row.status.toUpperCase(),
+      render: (row: Event) => row.status?.toUpperCase() || "N/A",
     },
     {
       key: "actions",
@@ -100,7 +144,7 @@ const EventManagement = () => {
             <FaEdit />
           </button>
           <button
-            onClick={() => handleDelete(row._id)}
+            onClick={() => handleDelete(row._id!)}
             className="text-red-600 hover:text-red-800"
           >
             <FaTrash />
