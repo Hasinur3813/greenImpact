@@ -35,21 +35,15 @@ const DropdownMenu: React.FC<DropdownProps> = ({
   return (
     <ul
       ref={DropdownRef}
-      className="absolute top-12 right-0 bg-white shadow-lg rounded-lg w-48 mt-4 space-y-2 py-4"
+      className="absolute top-12 right-0 bg-white shadow-lg space-y-0.5 rounded-lg w-48 mt-4 py-4"
     >
       {/* donor route */}
       {role === "donor" && (
         <>
-          <ListItem className="!py-0" path="/dashboard">
-            Dashboard
-          </ListItem>
-          <ListItem className="!py-0" path="/dashboard/my-donation">
-            My Donation
-          </ListItem>
-          <ListItem className="!py-0" path="/donate">
-            Donate Now
-          </ListItem>
-          <ListItem className="!py-0" path="/dashboard/transaction-history">
+          <ListItem path="/dashboard">Dashboard</ListItem>
+          <ListItem path="/dashboard/my-donation">My Donation</ListItem>
+          <ListItem path="/donate">Donate Now</ListItem>
+          <ListItem path="/dashboard/transaction-history">
             Transaction History
           </ListItem>
         </>
@@ -94,7 +88,7 @@ const DropdownMenu: React.FC<DropdownProps> = ({
           </ListItem>
         </>
       )}
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center mt-2">
         <button
           onClick={handleLogout}
           type="button"

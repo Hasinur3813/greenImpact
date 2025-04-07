@@ -1,6 +1,6 @@
-import EventCard from "../../components/EventCard/EventCard";
-import { Event } from "../../Types/Event";
-import useEvents from "../../hooks/useEvents";
+import EventCard from "../../../components/EventCard/EventCard";
+import { Event } from "../../../Types/Event";
+import useEvents from "../../../hooks/useEvents";
 
 const Events = () => {
   const { events, isLoading, error } = useEvents();

@@ -18,6 +18,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const COLORS = ["#00C49F", "#FF8042"];
 
@@ -159,7 +160,9 @@ const Overview = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ActionCard icon={<FaPlus />} label="Add Event" />
-        <ActionCard icon={<FaUserCog />} label="Manage Users" />
+        <Link to={"/dashboard/manage-users"} className="block w-full">
+          <ActionCard icon={<FaUserCog />} label="Manage Users" />
+        </Link>
       </div>
     </section>
   );
@@ -190,7 +193,7 @@ const SummaryCard = ({
 
 // Action button/card
 const ActionCard = ({ icon, label }: { icon: JSX.Element; label: string }) => (
-  <button className="flex items-center justify-center space-x-3 p-4 bg-primaryColor text-white font-semibold rounded-xl hover:bg-secondaryColor transition">
+  <button className="flex items-center justify-center space-x-3 p-4 bg-primaryColor text-white font-semibold rounded-xl w-full cursor-pointer hover:bg-secondaryColor transition">
     <span className="text-xl">{icon}</span>
     <span>{label}</span>
   </button>

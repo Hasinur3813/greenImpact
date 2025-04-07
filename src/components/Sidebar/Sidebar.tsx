@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center">
           <Link
             to="/"
-            className="text-xl text-primaryColor font-extrabold tracking-wide"
+            className="text-xl sm:text-2xl text-primaryColor font-bold tracking-wide"
           >
             GreenImpact
           </Link>
@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* List */}
       <div className="flex flex-col space-y-4 h-full">
-        <ul className="mt-4 space-y-2 ">
+        <ul className="mt-4 ">
           {/* common route */}
           <ListItem path="/dashboard">My Profile</ListItem>
           {/* donor route */}
@@ -81,11 +81,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* volunteer route */}
           {role === "volunteer" && (
             <>
-              <ListItem path="/dashboard/available-events">
-                Available Events
-              </ListItem>
+              <ListItem path="/events">Available Events</ListItem>
               <ListItem path="/dashboard/my-assigned-events">
-                My Assinged Events
+                My Assigned Events
               </ListItem>
               <ListItem path="/dashboard/progress-reports">
                 Progress Reports

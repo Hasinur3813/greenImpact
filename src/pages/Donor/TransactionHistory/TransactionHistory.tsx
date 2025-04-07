@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { FaTrash } from "react-icons/fa";
-import { useAuth } from "../../contexts/AuthProvider";
-import Table from "../../components/Table/Table";
+import { useAuth } from "../../../contexts/AuthProvider";
+import Table from "../../../components/Table/Table";
 
 interface Donation {
   _id: string;

@@ -2,21 +2,19 @@ import { createBrowserRouter } from "react-router";
 import MainLayout from "../layout/MainLayout";
 import HomePage from "../pages/HomePage";
 import DashboardLayout from "../layout/DashboardLayout";
-import MyDonations from "../pages/MyDonations/MyDonations";
-import AvailableEvents from "../pages/AvailableEvents/AvailableEvents";
-import Overview from "../pages/Overview/Overview";
-import DonateNow from "../pages/DonateNow/DonateNow";
-import TransactionHistory from "../pages/TransactionHistory/TransactionHistory";
-import MyAssignedEvents from "../pages/MyAssignedEvents/MyAssignedEvents";
-import ProgressReports from "../pages/ProgressReports/ProgressReports";
-import ManageUsers from "../pages/ManageUsers/ManageUsers";
-import EventManagement from "../pages/EventManagement/EventManagement";
-import Donations from "../pages/Donations/Donations";
-import ReportsAnalytics from "../pages/ReportsAnalytics/ReportsAnalytics";
-import Events from "../pages/Events/Events";
-import Aboutus from "../pages/AboutUs/AboutUs";
-import Donate from "../pages/Donate/Donate";
-import Contact from "../pages/Contact/Contact";
+import MyDonations from "../pages/Donor/MyDonations/MyDonations";
+import Overview from "../pages/Admin/Overview/Overview";
+import TransactionHistory from "../pages/Donor/TransactionHistory/TransactionHistory";
+import MyAssignedEvents from "../pages/Volunteer/MyAssignedEvents/MyAssignedEvents";
+import ProgressReports from "../pages/Volunteer/ProgressReports/ProgressReports";
+import ManageUsers from "../pages/Admin/ManageUsers/ManageUsers";
+import EventManagement from "../pages/Admin/EventManagement/EventManagement";
+import Donations from "../pages/Admin/Donations/Donations";
+import ReportsAnalytics from "../pages/Admin/ReportsAnalytics/ReportsAnalytics";
+import Events from "../pages/Homepage/Events/Events";
+import Aboutus from "../pages/Homepage/AboutUs/AboutUs";
+import Donate from "../pages/Homepage/Donate/Donate";
+import Contact from "../pages/Homepage/Contact/Contact";
 import MyProfile from "../pages/MyProfile/MyProfile";
 import PrivateRoute from "./PrivateRoute";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
@@ -65,14 +63,7 @@ export const router = createBrowserRouter([
         element: <MyProfile />,
       },
       // Donor routes
-      {
-        path: "donate-now",
-        element: (
-          <RoleBaseRoute allowedRole="donor">
-            <DonateNow />
-          </RoleBaseRoute>
-        ),
-      },
+
       {
         path: "my-donation",
         element: (
@@ -100,14 +91,7 @@ export const router = createBrowserRouter([
           </RoleBaseRoute>
         ),
       },
-      {
-        path: "available-events",
-        element: (
-          <RoleBaseRoute allowedRole="volunteer">
-            <AvailableEvents />
-          </RoleBaseRoute>
-        ),
-      },
+
       {
         path: "progress-reports",
         element: (

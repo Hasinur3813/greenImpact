@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
+import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
 
