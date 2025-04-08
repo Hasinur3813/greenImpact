@@ -17,7 +17,7 @@ export interface EventFormData {
   time: string;
   location: string;
   volunteersNeeded: number;
-  image?: FileList | null | string;
+  image?: FileList | File | null | string | undefined;
 }
 
 interface Column<T> {
@@ -71,6 +71,7 @@ const EventManagement = () => {
         status: "upcoming",
       };
       if (editData?._id) {
+        console.log(newEvent);
         // Update existing event
         await updateEventInDB(editData._id, newEvent);
         toast.success("Event Updated Successfully.");
@@ -82,7 +83,9 @@ const EventManagement = () => {
       }
       refetch();
     } catch {
-      toast.error("Failed to create event!");
+      toast.error(
+        editData ? "Failed to update event!" : "Failed to create event!"
+      );
     } finally {
       setLoading(false);
       setIsModalOpen(false);
@@ -91,7 +94,8 @@ const EventManagement = () => {
   };
 
   const updateEventInDB = async (id: string, event: Event) => {
-    await axiosSecure.patch(`/events/${id}`, event);
+    const res = await axiosSecure.patch(`/events/${id}`, event);
+    console.log(res.data);
   };
 
   const saveEventToDB = async (event: Event) => {

@@ -9,7 +9,7 @@ export interface EventFormData {
   time: string;
   location: string;
   volunteersNeeded: number;
-  image?: FileList | null | string;
+  image?: FileList | File | null | string | undefined;
 }
 interface EventModalProps {
   onClose: () => void;
@@ -34,9 +34,9 @@ const EventModal: React.FC<EventModalProps> = ({
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   useEffect(() => {
-    console.log(defaultValues);
     if (typeof defaultValues?.image === "string") {
       setImagePreview(defaultValues.image);
     } else {
@@ -47,6 +47,7 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file));
     }
   };
@@ -54,11 +55,16 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleClose = () => {
     reset();
     setImagePreview(null);
+    setSelectedImage(null);
     onClose();
   };
 
-  const handleFormSubmit = async (data: EventFormData) => {
-    onSubmit(data);
+  const handleFormSubmit = (data: EventFormData) => {
+    const formData = {
+      ...data,
+      image: selectedImage || defaultValues?.image,
+    };
+    onSubmit(formData);
   };
 
   return (

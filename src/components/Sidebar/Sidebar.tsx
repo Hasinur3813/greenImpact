@@ -1,4 +1,4 @@
-import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight, FaChevronLeft, FaLeaf } from "react-icons/fa";
 import { Link } from "react-router";
 import ListItem from "../ListItem/ListItem";
 import { FiLogOut } from "react-icons/fi";
@@ -50,9 +50,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center">
           <Link
             to="/"
-            className="text-xl sm:text-2xl text-primaryColor font-bold tracking-wide"
+            className="text-xl sm:text-2xl flex items-center gap-2 text-primaryColor font-bold tracking-wide"
           >
-            GreenImpact
+            <FaLeaf /> GreenImpact
           </Link>
         </div>
       </div>

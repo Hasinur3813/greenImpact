@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Link } from "react-router";
 import { FiMenu, FiX } from "react-icons/fi";
-import { FaSignInAlt } from "react-icons/fa";
+import { FaLeaf, FaSignInAlt } from "react-icons/fa";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import AuthModal from "../AuthModal/AuthModal";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -54,8 +54,11 @@ export default function Navbar() {
         {/* auth modal */}
         {state.openAuthModal && <AuthModal updateState={updateState} />}
         {/* Logo */}
-        <Link to="/" className="text-3xl font-bold text-primaryColor">
-          GreenImpact
+        <Link
+          to="/"
+          className="text-3xl font-bold flex items-center gap-2 text-primaryColor"
+        >
+          <FaLeaf /> GreenImpact
         </Link>
 
         {/* Mobile Menu Button */}

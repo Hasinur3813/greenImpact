@@ -1,6 +1,12 @@
+import DonationSection from "../components/DonationSection/DonationSection";
+
 import HeroSection from "../components/HeroSection/HeroSection";
+import HowItWorks from "../components/HowItWorkSection/HowItWorks";
+import OurImpact from "../components/OurImpactSection/OurImpact";
 import PopularEvents from "../components/PopularEvents/PopularEvents";
 import { Toaster } from "react-hot-toast";
+import VisionMissionSection from "../components/VisionMissionSection/VisionMissionSection";
+import CallToActionSection from "../components/CallToActionSection/CallToActionSection";
 
 const HomePage = () => {
   return (
@@ -8,6 +14,12 @@ const HomePage = () => {
       <Toaster />
       <HeroSection />
       <PopularEvents />
+      <HowItWorks />
+      <OurImpact />
+      {/* <GetInvolved /> */}
+      <DonationSection />
+      <VisionMissionSection />
+      <CallToActionSection />
     </>
   );
 };
