@@ -12,7 +12,9 @@ interface TableProps<T> {
   striped?: boolean;
 }
 
-export default function Table<T extends { _id: string }>({
+type rowIdType = string | undefined;
+
+export default function Table<T extends { _id?: rowIdType }>({
   columns,
   data,
   striped = true,

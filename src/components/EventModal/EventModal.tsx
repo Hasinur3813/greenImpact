@@ -1,29 +1,27 @@
 import { useForm } from "react-hook-form";
 import { FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { Event } from "../../Types/Event";
 
-interface EventModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: EventFormData) => void;
-  defaultValues?: Event;
-}
-
-interface EventFormData {
+export interface EventFormData {
   title: string;
   description: string;
   organizer: string;
   time: string;
   location: string;
   volunteersNeeded: number;
-  image?: File | null;
+  image?: FileList | null | string;
+}
+interface EventModalProps {
+  onClose: () => void;
+  loading: boolean;
+  onSubmit: (data: EventFormData) => void;
+  defaultValues?: EventFormData;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
-  isOpen,
   onClose,
   onSubmit,
+  loading,
   defaultValues,
 }) => {
   const {
@@ -31,16 +29,20 @@ const EventModal: React.FC<EventModalProps> = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Event>({
-    defaultValues,
+  } = useForm<EventFormData>({
+    defaultValues: { ...defaultValues, image: undefined },
   });
 
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    defaultValues?.image ? URL.createObjectURL(defaultValues.image) : null
-  );
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   useEffect(() => {
-    if (defaultValues) reset(defaultValues);
-  }, [defaultValues, reset]);
+    console.log(defaultValues);
+    if (typeof defaultValues?.image === "string") {
+      setImagePreview(defaultValues.image);
+    } else {
+      setImagePreview(null);
+    }
+  }, [defaultValues]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -55,17 +57,12 @@ const EventModal: React.FC<EventModalProps> = ({
     onClose();
   };
 
-  const handleFormSubmit = (data: EventFormData) => {
+  const handleFormSubmit = async (data: EventFormData) => {
     onSubmit(data);
-    reset();
-    setImagePreview(null);
-    onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex overflow-auto pt-20 pb-10  items-center justify-center">
+    <div className="fixed inset-0 bg-black/50 z-50 flex overflow-auto pt-20 pb-10 items-center justify-center">
       <div className="bg-white rounded-2xl p-6 shadow-lg z-[99] w-full max-w-xl relative">
         <button
           onClick={handleClose}
@@ -79,7 +76,7 @@ const EventModal: React.FC<EventModalProps> = ({
         </h2>
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-2">
-          {/* title */}
+          {/* Title */}
           <div>
             <input
               {...register("title", { required: "Title is required" })}
@@ -91,7 +88,7 @@ const EventModal: React.FC<EventModalProps> = ({
             )}
           </div>
 
-          {/* description */}
+          {/* Description */}
           <div>
             <textarea
               {...register("description", {
@@ -105,11 +102,11 @@ const EventModal: React.FC<EventModalProps> = ({
             )}
           </div>
 
-          {/* organizer */}
+          {/* Organizer */}
           <div>
             <input
               {...register("organizer", { required: "Organizer is required" })}
-              placeholder="Event organizer"
+              placeholder="Organizer"
               className="w-full border border-primaryColor rounded-lg p-2"
             />
             {errors.organizer && (
@@ -117,11 +114,11 @@ const EventModal: React.FC<EventModalProps> = ({
             )}
           </div>
 
-          {/* date */}
+          {/* Date */}
           <div>
             <input
-              type="time"
-              {...register("time", { required: "Time is required" })}
+              type="date"
+              {...register("time", { required: "Date is required" })}
               className="w-full border border-primaryColor rounded-lg p-2"
             />
             {errors.time && (
@@ -129,10 +126,8 @@ const EventModal: React.FC<EventModalProps> = ({
             )}
           </div>
 
-          {/* location */}
-
+          {/* Location */}
           <div>
-            {" "}
             <input
               {...register("location", { required: "Location is required" })}
               placeholder="Location"
@@ -143,14 +138,13 @@ const EventModal: React.FC<EventModalProps> = ({
             )}
           </div>
 
-          {/* organizer needed */}
+          {/* Volunteers Needed */}
           <div>
             <input
               type="number"
-              step="0.01"
               {...register("volunteersNeeded", {
-                required: "volunteersNeeded is required",
-                min: { value: 0, message: "Value must be positive" },
+                required: "Volunteers needed is required",
+                min: { value: 0, message: "Must be positive" },
               })}
               placeholder="Volunteers Needed"
               className="w-full border border-primaryColor rounded-lg p-2"
@@ -159,11 +153,14 @@ const EventModal: React.FC<EventModalProps> = ({
               <p className="text-red-500">{errors.volunteersNeeded.message}</p>
             )}
           </div>
+
           {/* Image Upload */}
           <div>
             <input
               type="file"
-              {...register("image")}
+              {...register("image", {
+                required: !defaultValues?.image ? " Image is required" : false,
+              })}
               accept="image/*"
               onChange={handleImageChange}
               className="w-full border border-primaryColor rounded-lg p-2 cursor-pointer"
@@ -177,13 +174,21 @@ const EventModal: React.FC<EventModalProps> = ({
                 />
               </div>
             )}
+            {errors.image && (
+              <p className="text-red-500">{errors.image.message}</p>
+            )}
           </div>
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-primaryColor cursor-pointer hover:bg-secondaryColor text-white py-3 rounded-lg font-semibold"
           >
-            {defaultValues ? "Update Event" : "Create Event"}
+            {loading
+              ? "Please wait..."
+              : defaultValues
+              ? "Update Event"
+              : "Create Event"}
           </button>
         </form>
       </div>

@@ -1,47 +1,24 @@
-// pages/admin/EventManagement.tsx
 import { useState } from "react";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
 import EventModal from "../../../components/EventModal/EventModal";
 import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Event } from "../../../Types/Event";
+import toast from "react-hot-toast";
+import useEvents from "../../../hooks/useEvents";
+import Loader from "../../../components/Loader/Loader";
 
-interface EventFormData {
+export interface EventFormData {
+  _id?: string;
   title: string;
   description: string;
   organizer: string;
   time: string;
   location: string;
   volunteersNeeded: number;
-  image?: File | null;
+  image?: FileList | null | string;
 }
-
-// Corrected Event interface
-export interface Event {
-  _id?: string | undefined;
-  title: string;
-  description: string;
-  location: string;
-  organizer: string;
-  time: string;
-  volunteersNeeded: number;
-  image: string;
-  status?: "upcoming" | "completed" | "cancelled";
-}
-
-const dummyEvents: Event[] = [
-  {
-    _id: "1",
-    title: "Tree Plantation Drive",
-    description: "hjshddhdkdk",
-    time: "2025-05-10",
-    organizer: "ajdhd",
-    volunteersNeeded: 20,
-    location: "Dhaka, Bangladesh",
-    image: "",
-    status: "upcoming",
-  },
-];
 
 interface Column<T> {
   key: keyof T | "actions";
@@ -50,33 +27,26 @@ interface Column<T> {
 }
 
 const EventManagement = () => {
-  const [events, setEvents] = useState<Event[]>(dummyEvents);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [editData, setEditData] = useState<Event | undefined>();
+  const [editData, setEditData] = useState<EventFormData | undefined>(
+    undefined
+  );
+  const [loading, setLoading] = useState<boolean>(false);
   const axiosSecure = useAxiosSecure();
+  const { events, isLoading, refetch } = useEvents();
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this event?")) {
-      setEvents(events.filter((event) => event._id !== id));
-    }
+    console.log("delete ", id);
   };
 
   const handleEdit = (event: Event) => {
-    // Map `time` to `date` and fix any mismatches for form default values
-    setEditData({
-      title: event.title,
-      description: event.description,
-      location: event.location,
-      organizer: event.organizer,
-      time: event.time,
-      volunteersNeeded: event.volunteersNeeded,
-      image: event.image,
-    });
+    setEditData(event);
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (data: EventFormData) => {
     try {
+      setLoading(true);
       let photoURL = typeof data.image === "string" ? data.image : "";
 
       if (data.image instanceof FileList && data.image[0]) {
@@ -95,32 +65,37 @@ const EventManagement = () => {
       }
 
       const newEvent: Event = {
-        title: data.title,
-        description: data.description,
-        location: data.location,
-        time: data.time,
-        volunteersNeeded: data.volunteersNeeded,
+        ...data,
         image: photoURL,
-        organizer: "GreenImpact Admin", // Or pull from context
+        organizer: data.organizer || "GreenImpact Admin",
         status: "upcoming",
       };
-
-      await saveEventToDB(newEvent);
-    } catch (error) {
-      console.error("Error submitting event:", error);
+      if (editData?._id) {
+        // Update existing event
+        await updateEventInDB(editData._id, newEvent);
+        toast.success("Event Updated Successfully.");
+      } else {
+        console.log("creating event");
+        // Create new event
+        await saveEventToDB(newEvent);
+        toast.success("Event Created Successfully.");
+      }
+      refetch();
+    } catch {
+      toast.error("Failed to create event!");
+    } finally {
+      setLoading(false);
+      setIsModalOpen(false);
+      setEditData(undefined);
     }
+  };
 
-    setIsModalOpen(false);
-    setEditData(undefined);
+  const updateEventInDB = async (id: string, event: Event) => {
+    await axiosSecure.patch(`/events/${id}`, event);
   };
 
   const saveEventToDB = async (event: Event) => {
-    try {
-      const res = await axiosSecure.post("/events", event);
-      console.log(res.data);
-    } catch (error) {
-      console.error("Error saving event to DB:", error);
-    }
+    await axiosSecure.post("/events", event);
   };
 
   const columns: Column<Event>[] = [
@@ -154,6 +129,10 @@ const EventManagement = () => {
     },
   ];
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <section className="p-6 bg-white shadow rounded-xl">
       <div className="flex justify-between items-center mb-6">
@@ -169,20 +148,25 @@ const EventManagement = () => {
         </button>
       </div>
 
-      <Table columns={columns} data={events} />
+      <Table columns={columns} data={events && events} />
 
-      {events.length === 0 && (
+      {events?.length === 0 && (
         <div className="text-center text-gray-500 py-8">
           No events available.
         </div>
       )}
 
-      <EventModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
-        defaultValues={editData}
-      />
+      {isModalOpen && (
+        <EventModal
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditData(undefined);
+          }}
+          onSubmit={handleSubmit}
+          defaultValues={editData}
+          loading={loading}
+        />
+      )}
     </section>
   );
 };

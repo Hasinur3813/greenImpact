@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useAuth } from "../contexts/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
@@ -33,6 +34,7 @@ const DashboardLayout = () => {
           isSidebarOpen ? "md:ml-64" : "md:ml-0"
         }`}
       >
+        <Toaster />
         <Outlet />
       </div>
     </div>

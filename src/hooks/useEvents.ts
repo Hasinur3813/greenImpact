@@ -1,20 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import useAxiosSecure from "./useAxiosSecure";
 
 const useEvents = () => {
+  const axios = useAxiosSecure();
   const {
     data: events,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["events"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/events.json");
+      const { data } = await axios.get("/events");
       return data;
     },
   });
 
-  return { events, isLoading, error };
+  return { events, isLoading, error, refetch };
 };
 
 export default useEvents;
