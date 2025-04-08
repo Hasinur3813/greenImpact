@@ -23,14 +23,15 @@ const RoleBaseRoute = ({
     }
   }, [loading, user, allowedRole]);
 
-  if (loading && isAuthorized === null) {
+  if (loading || isAuthorized === null) {
     return <Loader />;
   }
+
   if (!isAuthorized) {
     return <ErrorPage />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default RoleBaseRoute;

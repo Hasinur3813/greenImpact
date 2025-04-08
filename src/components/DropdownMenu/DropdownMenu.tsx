@@ -1,5 +1,5 @@
 import React from "react";
-import ListItem from "../ListItem/ListItem";
+import ListItem from "../shared/ListItem/ListItem";
 import { useAuth } from "../../contexts/AuthProvider";
 import { FiLogOut } from "react-icons/fi";
 import toast from "react-hot-toast";

@@ -32,7 +32,7 @@ export default function Table<T extends { _id?: rowIdType }>({
           </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIndex) => (
+          {data?.map((row, rowIndex) => (
             <tr
               key={row._id}
               className={`border-b hover:bg-primaryColor/10 border-primaryColor ${

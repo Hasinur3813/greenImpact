@@ -1,6 +1,6 @@
 import { FaChevronRight, FaChevronLeft, FaLeaf } from "react-icons/fa";
 import { Link } from "react-router";
-import ListItem from "../ListItem/ListItem";
+import ListItem from "../shared/ListItem/ListItem";
 import { FiLogOut } from "react-icons/fi";
 import React from "react";
 import { useAuth } from "../../contexts/AuthProvider";

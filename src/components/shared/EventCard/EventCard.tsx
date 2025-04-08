@@ -1,6 +1,6 @@
 import React from "react";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
-import { Event } from "../../Types/Event";
+import { Event } from "../../../Types/Event";
 import { Link } from "react-router";
 
 interface EventType {

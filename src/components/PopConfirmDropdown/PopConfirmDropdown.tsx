@@ -57,7 +57,7 @@ const PopconfirmDropdown: React.FC<RoleDropdownProps> = ({
 
       {showConfirm && (
         <div
-          className={`absolute opacity-0 transition-all duration-300 z-50 mt-2 w-64 bg-white border border-gray-200 shadow-xl rounded p-4 space-y-3`}
+          className={`absolute transition-all duration-300 z-50 mt-2 w-64 bg-white border border-gray-200 shadow-xl rounded p-4 space-y-3`}
         >
           <p className="text-gray-700 text-sm font-medium">
             Are you sure you want to change{" "}

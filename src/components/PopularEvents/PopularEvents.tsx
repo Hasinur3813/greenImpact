@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import useEvents from "../../hooks/useEvents";
-import EventCard from "../EventCard/EventCard";
+import EventCard from "../shared/EventCard/EventCard";
 import { Event } from "../../Types/Event";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 

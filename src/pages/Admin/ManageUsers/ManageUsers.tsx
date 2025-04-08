@@ -1,6 +1,9 @@
 import { FaUserEdit } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
 import PopconfirmDropdown from "../../../components/PopConfirmDropdown/PopConfirmDropdown";
+import useUsers from "../../../hooks/useUsers";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 interface User {
   _id: string;
@@ -13,52 +16,25 @@ interface Column<T> {
   label: string;
   render?: (row: T) => React.ReactNode;
 }
-const users: User[] = [
-  {
-    _id: "u1",
-    name: "Alice Green",
-    email: "alice@greenimpact.org",
-    role: "admin",
-  },
-  {
-    _id: "u2",
-    name: "Bob Johnson",
-    email: "bob@greenimpact.org",
-    role: "donor",
-  },
-  {
-    _id: "u3",
-    name: "Carol White",
-    email: "carol@greenimpact.org",
-    role: "volunteer",
-  },
-  {
-    _id: "u4",
-    name: "David Smith",
-    email: "david@greenimpact.org",
-    role: "donor",
-  },
-  {
-    _id: "u5",
-    name: "Eva Brown",
-    email: "eva@greenimpact.org",
-    role: "volunteer",
-  },
-];
 
 const ManageUsers = () => {
-  // const [users, setUsers] = useState<User[]>([]);
-  const loading = false;
+  const axios = useAxiosSecure();
+  const { users, isLoading, refetch } = useUsers();
 
-  // useEffect(() => {
-  //   axios.get("/api/users").then((res) => {
-  //     setUsers(res.data);
-  //     setLoading(false);
-  //   });
-  // }, []);
-
-  const handleRoleChange = (userId: string, newRole: string) => {
-    console.log(`User ${userId} role changed to ${newRole}`);
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    try {
+      const { data } = await axios.patch(
+        `/auth/change-user-role?id=${userId}&role=${newRole}`
+      );
+      if (data.success) {
+        toast.success("User role has been changed!");
+        refetch();
+      } else {
+        toast.error("Failed to change the user role!");
+      }
+    } catch {
+      toast.error("Failed to change the user role!");
+    }
   };
 
   const columns: Column<User>[] = [
@@ -85,7 +61,7 @@ const ManageUsers = () => {
         <h2 className="text-3xl font-bold text-primaryColor">Manage Users</h2>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <div className="text-center text-lg text-muted py-10">
           Loading Users...
         </div>

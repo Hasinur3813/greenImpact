@@ -1,4 +1,4 @@
-import EventCard from "../../../components/EventCard/EventCard";
+import EventCard from "../../../components/shared/EventCard/EventCard";
 import { Event } from "../../../Types/Event";
 import useEvents from "../../../hooks/useEvents";
 
