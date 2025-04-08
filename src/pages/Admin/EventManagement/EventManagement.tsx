@@ -8,6 +8,7 @@ import { Event } from "../../../Types/Event";
 import toast from "react-hot-toast";
 import useEvents from "../../../hooks/useEvents";
 import Loader from "../../../components/Loader/Loader";
+import Modal from "../../../components/shared/Modal/Modal";
 
 export interface EventFormData {
   _id?: string;
@@ -21,7 +22,7 @@ export interface EventFormData {
 }
 
 interface Column<T> {
-  key: keyof T | "actions";
+  key: keyof T | "action";
   label: string;
   render?: (row: T) => React.ReactNode;
 }
@@ -31,12 +32,28 @@ const EventManagement = () => {
   const [editData, setEditData] = useState<EventFormData | undefined>(
     undefined
   );
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [deletionId, setDeletioId] = useState<string | undefined>(undefined);
+
   const [loading, setLoading] = useState<boolean>(false);
   const axiosSecure = useAxiosSecure();
   const { events, isLoading, refetch } = useEvents();
 
-  const handleDelete = (id: string) => {
-    console.log("delete ", id);
+  const handleDelete = async () => {
+    try {
+      const { data } = await axiosSecure.delete(`/event/delete/${deletionId}`);
+      if (data.success) {
+        toast.success("The event has been deleted!");
+        refetch();
+      } else {
+        toast.error("Failed to delete the event!");
+      }
+    } catch {
+      toast.error("Failed to delete the event!");
+    } finally {
+      setDeletioId(undefined);
+      setOpenDeleteModal(false);
+    }
   };
 
   const handleEdit = (event: Event) => {
@@ -71,7 +88,6 @@ const EventManagement = () => {
         status: "upcoming",
       };
       if (editData?._id) {
-        console.log(newEvent);
         // Update existing event
         await updateEventInDB(editData._id, newEvent);
         toast.success("Event Updated Successfully.");
@@ -94,15 +110,14 @@ const EventManagement = () => {
   };
 
   const updateEventInDB = async (id: string, event: Event) => {
-    const res = await axiosSecure.patch(`/events/${id}`, event);
-    console.log(res.data);
+    await axiosSecure.patch(`/events/${id}`, event);
   };
 
   const saveEventToDB = async (event: Event) => {
     await axiosSecure.post("/events", event);
   };
 
-  const columns: Column<Event>[] = [
+  const columns: (Column<Event> & { key: keyof Event | "action" })[] = [
     { key: "title", label: "Title" },
     { key: "time", label: "Date" },
     { key: "location", label: "Location" },
@@ -112,19 +127,22 @@ const EventManagement = () => {
       render: (row: Event) => row.status?.toUpperCase() || "N/A",
     },
     {
-      key: "actions",
+      key: "action",
       label: "Actions",
       render: (row: Event) => (
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => handleEdit(row)}
-            className="text-blue-600 hover:text-blue-800"
+            className="text-primaryColor/60 cursor-pointer hover:text-primaryColor"
           >
             <FaEdit />
           </button>
           <button
-            onClick={() => handleDelete(row._id!)}
-            className="text-red-600 hover:text-red-800"
+            onClick={() => {
+              setDeletioId(row._id);
+              setOpenDeleteModal(true);
+            }}
+            className="text-red-600 cursor-pointer hover:text-red-800"
           >
             <FaTrash />
           </button>
@@ -160,6 +178,7 @@ const EventManagement = () => {
         </div>
       )}
 
+      {/* modal for creating/updating event */}
       {isModalOpen && (
         <EventModal
           onClose={() => {
@@ -171,6 +190,14 @@ const EventManagement = () => {
           loading={loading}
         />
       )}
+
+      {/* modal for deletion event */}
+      <Modal
+        isOpen={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        onConfirm={() => handleDelete()}
+        danger={true}
+      />
     </section>
   );
 };

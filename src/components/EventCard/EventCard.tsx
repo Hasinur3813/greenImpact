@@ -28,7 +28,7 @@ const EventCard: React.FC<EventType> = ({ event, userRole }) => {
       <div className="flex items-center text-sm text-muted space-x-4">
         <div className="flex items-center space-x-2">
           <FaCalendarAlt className="text-primaryColor" />
-          <span>{event.date}</span>
+          <span>{event.time}</span>
         </div>
         <div className="flex items-center space-x-2">
           <FaMapMarkerAlt className="text-red-500" />

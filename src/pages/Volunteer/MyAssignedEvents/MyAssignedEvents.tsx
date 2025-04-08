@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import { FaCheckCircle, FaTimesCircle, FaEye } from "react-icons/fa";
 
 const MyAssignedEvents = () => {
-  const [assignedEvents, setAssignedEvents] = useState([]);
+  interface Event {
+    id: string;
+    title: string;
+    date: string;
+    location: string;
+    status: string;
+  }
+
+  const [assignedEvents, setAssignedEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     // Simulate fetching assigned events

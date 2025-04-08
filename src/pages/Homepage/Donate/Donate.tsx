@@ -8,7 +8,6 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
 
 const Donate: React.FC = () => {
   const [amount, setAmount] = useState<number | string>(50);
-  const [message, setMessage] = useState<string>("");
   const [selectedEvent, setSelectedEvent] = useState<string>("");
 
   const events = [
@@ -76,7 +75,7 @@ const Donate: React.FC = () => {
           <textarea
             placeholder="Leave a message (optional)"
             className="mt-4 p-3 w-full border border-primaryColor rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor"
-            onChange={(e) => setMessage(e.target.value)}
+            // onChange={(e) => setMessage(e.target.value)}
           ></textarea>
 
           {/* Stripe Payment Card */}

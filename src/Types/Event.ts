@@ -6,6 +6,7 @@ export interface Event {
   organizer: string;
   time: string;
   volunteersNeeded: number;
+  volunteersJoined?: number;
   status?: "upcoming" | "completed" | "cancelled";
   image: string;
 }

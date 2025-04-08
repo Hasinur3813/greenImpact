@@ -9,11 +9,8 @@ import { Event } from "../../Types/Event";
 import { FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function PopularEvents() {
-  const {
-    events,
-    isLoading,
-    error,
-  }: { events: Event[]; isLoading: boolean; error: unknown } = useEvents();
+  const { events }: { events: Event[]; isLoading: boolean; error: unknown } =
+    useEvents();
 
   return (
     <section className="bg-offWhite py-16">
@@ -46,7 +43,7 @@ export default function PopularEvents() {
             className="mb-8"
           >
             {events?.map((event: Event) => (
-              <SwiperSlide key={event.id} className="!h-auto">
+              <SwiperSlide key={event._id} className="!h-auto">
                 <div className="h-full flex">
                   <EventCard event={event} userRole="donor" />
                 </div>

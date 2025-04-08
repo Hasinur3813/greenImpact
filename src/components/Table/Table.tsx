@@ -1,13 +1,13 @@
 import React from "react";
 
 interface Column<T> {
-  key: keyof T;
+  key: keyof T | "action";
   label: string;
   render?: (row: T) => React.ReactNode;
 }
 
 interface TableProps<T> {
-  columns: Column<T>[];
+  columns: (Column<T> & { key: keyof T | "action" })[];
   data: T[];
   striped?: boolean;
 }
@@ -41,7 +41,11 @@ export default function Table<T extends { _id?: rowIdType }>({
             >
               {columns.map((col) => (
                 <td key={String(col.key)} className="py-3 px-4">
-                  {col.render ? col.render(row) : String(row[col.key])}
+                  {col.render
+                    ? col.render(row)
+                    : col.key !== "action" && col.key in row
+                    ? String(row[col.key])
+                    : ""}
                 </td>
               ))}
             </tr>

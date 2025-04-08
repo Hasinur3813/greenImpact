@@ -21,7 +21,7 @@ const Events = () => {
       </h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((event: Event) => (
-          <EventCard key={event.id} event={event} userRole={userRole} />
+          <EventCard key={event._id} event={event} userRole={userRole} />
         ))}
       </div>
     </section>

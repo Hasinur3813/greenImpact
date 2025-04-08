@@ -1,7 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { FaTrash } from "react-icons/fa";
-import { useAuth } from "../../../contexts/AuthProvider";
 import Table from "../../../components/Table/Table";
 
 interface Donation {
@@ -56,25 +53,22 @@ const donations = [
   },
 ];
 
-const fetchDonations = async (email: string): Promise<Donation[]> => {
-  const res = await fetch(`/api/donations?email=${email}`, {
-    credentials: "include",
-  });
-  return res.json();
-};
+// const fetchDonations = async (email: string): Promise<Donation[]> => {
+//   const res = await fetch(`/api/donations?email=${email}`, {
+//     credentials: "include",
+//   });
+//   return res.json();
+// };
 
-const clearDonations = async (email: string) => {
-  const res = await fetch(`/api/donations/clear?email=${email}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
-  return res.json();
-};
+// const clearDonations = async (email: string) => {
+//   const res = await fetch(`/api/donations/clear?email=${email}`, {
+//     method: "DELETE",
+//     credentials: "include",
+//   });
+//   return res.json();
+// };
 
 export default function TransactionHistory() {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-
   const isLoading = false;
   const columns: Column<Donation>[] = [
     { key: "eventTitle", label: "Event" },

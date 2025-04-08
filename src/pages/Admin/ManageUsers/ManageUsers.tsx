@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FaUserEdit } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
 import PopconfirmDropdown from "../../../components/PopConfirmDropdown/PopConfirmDropdown";
@@ -49,7 +48,7 @@ const users: User[] = [
 
 const ManageUsers = () => {
   // const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
+  const loading = false;
 
   // useEffect(() => {
   //   axios.get("/api/users").then((res) => {

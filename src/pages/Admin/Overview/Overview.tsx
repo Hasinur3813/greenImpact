@@ -174,7 +174,7 @@ const SummaryCard = ({
   title,
   value,
 }: {
-  icon: JSX.Element;
+  icon: React.ReactNode;
   title: string;
   value: string | number;
 }) => (
@@ -192,7 +192,13 @@ const SummaryCard = ({
 );
 
 // Action button/card
-const ActionCard = ({ icon, label }: { icon: JSX.Element; label: string }) => (
+const ActionCard = ({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) => (
   <button className="flex items-center justify-center space-x-3 p-4 bg-primaryColor text-white font-semibold rounded-xl w-full cursor-pointer hover:bg-secondaryColor transition">
     <span className="text-xl">{icon}</span>
     <span>{label}</span>

@@ -13,13 +13,17 @@ interface User {
   role: string;
 }
 
+interface asyncResponse {
+  success: boolean;
+}
+
 interface AuthContextProps {
   user: User | null;
   loading: boolean;
   setUser: (user: User | null) => void;
   logout: () => Promise<void>;
-  register: (userData: User) => Promise<void>;
-  login: (userData: loginData) => Promise<void>;
+  register: (userData: User) => Promise<asyncResponse>;
+  login: (userData: loginData) => Promise<asyncResponse>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);

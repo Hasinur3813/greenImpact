@@ -1,14 +1,6 @@
 import React from "react";
 import { FaCalendarAlt, FaDollarSign, FaReceipt } from "react-icons/fa";
 
-type Donation = {
-  _id: string;
-  eventTitle: string;
-  amount: number;
-  transactionId: string;
-  date: string;
-};
-
 const donations = [
   {
     _id: "abc12df3",

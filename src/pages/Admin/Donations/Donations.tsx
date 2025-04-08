@@ -1,9 +1,22 @@
-// pages/admin/Donations.tsx
-import { useState } from "react";
 import { FaSearch, FaTrash } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
 
-const dummyDonations = [
+interface Donation {
+  _id: string; // Unique identifier for the donation
+  donorName: string; // Name of the donor
+  amount: number; // Donation amount
+  eventTitle: string; // Title of the event associated with the donation
+  transactionId: string; // Transaction ID for the donation
+  date: string; // Date of the donation (ISO or formatted string)
+  action?: string; // Optional action key to align with the TableProps definition
+}
+interface Column<T> {
+  key: keyof T | "action";
+  label: string;
+  render?: (row: T) => React.ReactNode;
+}
+
+const donations: Donation[] = [
   {
     _id: "1",
     donorName: "Hasin Ahmed",
@@ -22,20 +35,20 @@ const dummyDonations = [
   },
 ];
 
-const columns = [
+const columns: Column<Donation>[] = [
   { key: "donorName", label: "Donor" },
   { key: "eventTitle", label: "Event" },
   {
     key: "amount",
     label: "Amount",
-    render: (row) => `$${row.amount}`,
+    render: (row: Donation) => `$${row.amount}`,
   },
   { key: "transactionId", label: "Transaction ID" },
   { key: "date", label: "Date" },
   {
     key: "action",
     label: "",
-    render: (row) => (
+    render: (row: Donation) => (
       <button
         onClick={() => handleDelete(row._id)}
         className="text-red-500 hover:text-red-700"
@@ -53,8 +66,6 @@ const handleDelete = (id: string) => {
 };
 
 const Donations = () => {
-  const [donations, setDonations] = useState(dummyDonations);
-
   return (
     <section className="p-6 bg-white shadow rounded-xl">
       <div className="flex justify-between items-center mb-4">
