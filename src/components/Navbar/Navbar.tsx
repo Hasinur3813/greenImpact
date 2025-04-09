@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Link } from "react-router";
+import { NavLink, Link, useLocation } from "react-router";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaLeaf, FaSignInAlt } from "react-icons/fa";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
@@ -20,11 +20,17 @@ export default function Navbar() {
     openAuthModal: false,
   });
 
+  const location = useLocation();
+
   useEffect(() => {
+    if (state.isOpenMobileMenu) {
+      setState((prev) => ({ ...prev, isOpenMobileMenu: false }));
+    }
     if (currentUser) {
       setState((preveState) => ({ ...preveState, openAuthModal: false }));
     }
-  }, [currentUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, location.pathname]);
 
   const DropdownRef = useRef(null);
   // Function to update state properties
@@ -66,128 +72,128 @@ export default function Navbar() {
           onClick={() =>
             updateState("isOpenMobileMenu", !state.isOpenMobileMenu)
           }
-          className="md:hidden text-darkGray focus:outline-none text-2xl"
+          className="md:hidden cursor-pointer text-primaryColor focus:outline-none text-2xl"
         >
           {state.isOpenMobileMenu ? <FiX /> : <FiMenu />}
         </button>
 
         {/* Menu Items */}
-        <ul
-          className={`md:flex md:space-x-6 items-center absolute md:static top-16 left-0 w-full md:w-auto bg-offWhite md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300 ease-in-out ${
-            state.isOpenMobileMenu ? "block" : "hidden"
-          }`}
-        >
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `text-lg transition font-semibold ${
-                  isActive
-                    ? "text-primaryColor"
-                    : "text-text hover:text-primaryColor"
-                }`
-              }
-            >
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                `text-lg transition font-semibold ${
-                  isActive
-                    ? "text-primaryColor"
-                    : "text-text hover:text-primaryColor"
-                }`
-              }
-            >
-              About
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/events"
-              className={({ isActive }) =>
-                `text-lg transition font-semibold ${
-                  isActive
-                    ? "text-primaryColor"
-                    : "text-text hover:text-primaryColor"
-                }`
-              }
-            >
-              Events
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/donate"
-              className={({ isActive }) =>
-                `text-lg transition font-semibold ${
-                  isActive
-                    ? "text-primaryColor"
-                    : "text-text hover:text-primaryColor"
-                }`
-              }
-            >
-              Donate
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                `text-lg transition font-semibold ${
-                  isActive
-                    ? "text-primaryColor"
-                    : "text-text hover:text-primaryColor"
-                }`
-              }
-            >
-              Contact
-            </NavLink>
-          </li>
-
-          {/* Conditionally render Login or Avatar */}
-          {!currentUser ? (
+        {state?.isOpenMobileMenu && (
+          <ul
+            className={`md:flex md:space-x-6 items-center absolute md:static top-16 left-0 w-full md:w-auto bg-offWhite md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300 ease-in-out`}
+          >
             <li>
-              <button
-                onClick={() =>
-                  updateState("openAuthModal", !state.openAuthModal)
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `text-lg transition font-semibold ${
+                    isActive
+                      ? "text-primaryColor"
+                      : "text-text hover:text-primaryColor"
+                  }`
                 }
-                type="button"
-                className="flex items-center  cursor-pointer text-lg text-white bg-primaryColor/80 hover:bg-primaryColor py-2 px-4 rounded-full transition font-semibold"
               >
-                <FaSignInAlt className="mr-2 animate-pulse" />{" "}
-                <span>Login</span>
-              </button>
+                Home
+              </NavLink>
             </li>
-          ) : (
-            <li className="relative">
-              <button
-                onClick={() =>
-                  updateState("isDropdownOpen", !state.isDropdownOpen)
+            <li>
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  `text-lg transition font-semibold ${
+                    isActive
+                      ? "text-primaryColor"
+                      : "text-text hover:text-primaryColor"
+                  }`
                 }
-                className="flex items-center cursor-pointer space-x-2 "
               >
-                <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
-                  <span className="font-medium text-3xl text-primaryColor">
-                    {currentUser.name.slice(0, 1)}
-                  </span>
-                </div>
-              </button>
+                About
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/events"
+                className={({ isActive }) =>
+                  `text-lg transition font-semibold ${
+                    isActive
+                      ? "text-primaryColor"
+                      : "text-text hover:text-primaryColor"
+                  }`
+                }
+              >
+                Events
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/donate"
+                className={({ isActive }) =>
+                  `text-lg transition font-semibold ${
+                    isActive
+                      ? "text-primaryColor"
+                      : "text-text hover:text-primaryColor"
+                  }`
+                }
+              >
+                Donate
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `text-lg transition font-semibold ${
+                    isActive
+                      ? "text-primaryColor"
+                      : "text-text hover:text-primaryColor"
+                  }`
+                }
+              >
+                Contact
+              </NavLink>
+            </li>
 
-              {/* Dropdown Menu */}
-              {state.isDropdownOpen && (
-                <DropdownMenu
-                  setState={setState}
-                  DropdownRef={DropdownRef}
-                  role={currentUser?.role}
-                />
-              )}
-            </li>
-          )}
-        </ul>
+            {/* Conditionally render Login or Avatar */}
+            {!currentUser ? (
+              <li>
+                <button
+                  onClick={() =>
+                    updateState("openAuthModal", !state.openAuthModal)
+                  }
+                  type="button"
+                  className="flex items-center mt-2 md:mt-0  cursor-pointer text-lg text-white bg-primaryColor/80 hover:bg-primaryColor py-2 px-4 rounded-full transition font-semibold"
+                >
+                  <FaSignInAlt className="mr-2 animate-pulse" />{" "}
+                  <span>Login</span>
+                </button>
+              </li>
+            ) : (
+              <li className="relative">
+                <button
+                  onClick={() =>
+                    updateState("isDropdownOpen", !state.isDropdownOpen)
+                  }
+                  className="flex items-center cursor-pointer space-x-2 "
+                >
+                  <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
+                    <span className="font-medium text-3xl text-primaryColor">
+                      {currentUser.name.slice(0, 1)}
+                    </span>
+                  </div>
+                </button>
+
+                {/* Dropdown Menu */}
+                {state.isDropdownOpen && (
+                  <DropdownMenu
+                    setState={setState}
+                    DropdownRef={DropdownRef}
+                    role={currentUser?.role}
+                  />
+                )}
+              </li>
+            )}
+          </ul>
+        )}
       </div>
     </nav>
   );
