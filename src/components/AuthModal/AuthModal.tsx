@@ -4,6 +4,9 @@ import LoginForm from "../LoginForm/LoginForm";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import { useAuth } from "../../contexts/AuthProvider";
 import { toast } from "react-hot-toast";
+import DemoLogin from "../DemoLogin/DemoLogin";
+import { FaSignInAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 interface AuthModalProps {
   updateState: (key: string, value: boolean) => void;
@@ -25,6 +28,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
   const { register, login } = useAuth();
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [role, setRole] = useState<string>("donor");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleLogin = async (data: loginData) => {
     try {
@@ -93,15 +97,31 @@ const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {
         </div>
 
         {/* Form Container */}
-        <div className="relative min-h-[500px] h-full overflow-hidden">
+        <div className="relative  h-[450px] overflow-x-hidden overflow-y-auto">
           <div
             className={`absolute inset-0 items-center flex transition-transform duration-700 ${
               isRegister ? "-translate-x-full" : "translate-x-0"
             }`}
           >
+            {/* button for open demo login modal */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setModalOpen(true)}
+              className="flex items-center absolute top-0 cursor-pointer gap-2 px-5 py-2.5 bg-primaryColor text-white rounded-full shadow-md hover:bg-secondaryColor transition-all font-semibold"
+            >
+              <FaSignInAlt />
+              Try Demo
+            </motion.button>
+
+            {/* Demo Credentials Section */}
+            <DemoLogin
+              updateState={updateState}
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+            />
             {/* Login Form */}
             <LoginForm handleLogin={handleLogin} />
-
             {/* Register Form */}
             <RegisterForm
               role={role}

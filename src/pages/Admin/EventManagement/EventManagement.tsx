@@ -66,10 +66,10 @@ const EventManagement = () => {
       setLoading(true);
       let photoURL = typeof data.image === "string" ? data.image : "";
 
-      if (data.image instanceof FileList && data.image[0]) {
+      if (data.image instanceof File) {
         const formData = new FormData();
         formData.append("key", import.meta.env.VITE_IMGBB_API_KEY);
-        formData.append("image", data.image[0]);
+        formData.append("image", data.image);
 
         const res = await axios.post(
           "https://api.imgbb.com/1/upload",
@@ -92,7 +92,6 @@ const EventManagement = () => {
         await updateEventInDB(editData._id, newEvent);
         toast.success("Event Updated Successfully.");
       } else {
-        console.log("creating event");
         // Create new event
         await saveEventToDB(newEvent);
         toast.success("Event Created Successfully.");

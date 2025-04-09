@@ -4,6 +4,7 @@ import PopconfirmDropdown from "../../../components/PopConfirmDropdown/PopConfir
 import useUsers from "../../../hooks/useUsers";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import Loader from "../../../components/Loader/Loader";
 
 interface User {
   _id: string;
@@ -63,7 +64,7 @@ const ManageUsers = () => {
 
       {isLoading ? (
         <div className="text-center text-lg text-muted py-10">
-          Loading Users...
+          <Loader />
         </div>
       ) : (
         <Table data={users} columns={columns} />
