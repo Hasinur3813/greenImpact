@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -9,12 +9,17 @@ interface donationProps {
   amount: number;
   selectedEvent: string;
   message: string;
+  inputValidation: (
+    errorName: "amountError" | "eventError",
+    action: boolean
+  ) => void;
 }
 
 const CheckoutForm: React.FC<donationProps> = ({
   amount,
   selectedEvent,
   message,
+  inputValidation,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -50,15 +55,17 @@ const CheckoutForm: React.FC<donationProps> = ({
         const paymentDetails: Donation = {
           donor: user?._id,
           amount: amount,
-          message: message ? message : "",
+          message: message || "",
           eventTitle: selectedEvent,
           transactionId: paymentMethod.id,
         };
 
-        await saveDonationDetails(paymentDetails);
-
-        // Simulate a successful payment process
-        toast.success("Payment successful!");
+        const data = await saveDonationDetails(paymentDetails);
+        if (data.success) {
+          toast.success(data?.message || "Thank you for you support!");
+        } else {
+          toast.error("Something went wrong!");
+        }
 
         // Clear the card input field
         const cardElement = elements.getElement(CardElement);
@@ -74,8 +81,14 @@ const CheckoutForm: React.FC<donationProps> = ({
 
   const saveDonationDetails = async (paymentDetails: Donation) => {
     const res = await axios.post("/donation/save-donation", paymentDetails);
-    console.log(res);
+    return res.data;
   };
+
+  useEffect(() => {
+    inputValidation("amountError", !amount);
+    inputValidation("eventError", !selectedEvent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, selectedEvent]);
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
@@ -85,8 +98,12 @@ const CheckoutForm: React.FC<donationProps> = ({
       <CardElement className="p-3 border border-primaryColor rounded-md" />
       <button
         type="submit"
-        className="mt-4 w-full cursor-pointer bg-primaryColor text-white py-2 rounded-md font-semibold hover:bg-secondaryColor transition"
-        disabled={!stripe}
+        disabled={!selectedEvent || !amount || !stripe}
+        className={`${
+          !selectedEvent || !amount || !stripe
+            ? "bg-primaryColor/50 cursor-not-allowed"
+            : "bg-primaryColor hover:bg-secondaryColor cursor-pointer"
+        } mt-4 w-full   text-white py-2 rounded-md font-semibold  transition`}
       >
         {loading ? "Processing..." : `Pay $${amount}`}
       </button>

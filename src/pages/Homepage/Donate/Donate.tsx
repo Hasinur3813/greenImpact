@@ -12,7 +12,15 @@ const Donate: React.FC = () => {
   const [amount, setAmount] = useState<number | string>(50);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [error, setError] = useState({
+    amountError: false,
+    eventError: false,
+  });
   const { events } = useEvents();
+
+  const inputValidation = (errorName: string, action: boolean) => {
+    setError((prevError) => ({ ...prevError, [errorName]: action }));
+  };
 
   return (
     <Elements stripe={stripePromise}>
@@ -32,15 +40,27 @@ const Donate: React.FC = () => {
             value={selectedEvent}
             onChange={(e) => setSelectedEvent(e.target.value)}
           >
-            <option value="" disabled>
-              Select an Event
-            </option>
+            <option value="">Select an Event</option>
             {events?.map((event: Event) => (
               <option key={event._id} value={event.title}>
                 {event.title}
               </option>
             ))}
           </select>
+          {error?.eventError && (
+            <p className="text-left font-semibold text-red">
+              Please select an event to donate.
+            </p>
+          )}
+
+          {selectedEvent && (
+            <div>
+              <p className="py-3 px-2 bg-primaryColor/10 my-4 rounded-lg border-l-8 border-primaryColor">
+                You are donating to <strong>{selectedEvent} </strong> of{" "}
+                <strong>${amount || 0}</strong>
+              </p>
+            </div>
+          )}
 
           {/* Preset Donation Amounts */}
           <div className="flex gap-3 justify-between mt-6 flex-wrap">
@@ -68,7 +88,11 @@ const Donate: React.FC = () => {
             className="mt-4 w-full px-4 py-3 border border-primaryColor rounded-lg text-lg text-center focus:outline-none focus:ring-2 focus:ring-primaryColor"
             placeholder="Enter custom amount"
           />
-
+          {error?.amountError && (
+            <p className="text-left font-semibold text-red">
+              Please select an amount or choose a custom amount.
+            </p>
+          )}
           {/* Custom Message */}
           <textarea
             placeholder="Leave a message (optional)"
@@ -82,6 +106,7 @@ const Donate: React.FC = () => {
               amount={Number(amount)}
               selectedEvent={selectedEvent}
               message={message}
+              inputValidation={inputValidation}
             />
           </div>
         </div>
