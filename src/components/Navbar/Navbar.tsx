@@ -78,122 +78,123 @@ export default function Navbar() {
         </button>
 
         {/* Menu Items */}
-        {state?.isOpenMobileMenu && (
-          <ul
-            className={`md:flex md:space-x-6 items-center absolute md:static top-16 left-0 w-full md:w-auto bg-offWhite md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300 ease-in-out`}
-          >
-            <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `text-lg transition font-semibold ${
-                    isActive
-                      ? "text-primaryColor"
-                      : "text-text hover:text-primaryColor"
-                  }`
-                }
-              >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  `text-lg transition font-semibold ${
-                    isActive
-                      ? "text-primaryColor"
-                      : "text-text hover:text-primaryColor"
-                  }`
-                }
-              >
-                About
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/events"
-                className={({ isActive }) =>
-                  `text-lg transition font-semibold ${
-                    isActive
-                      ? "text-primaryColor"
-                      : "text-text hover:text-primaryColor"
-                  }`
-                }
-              >
-                Events
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/donate"
-                className={({ isActive }) =>
-                  `text-lg transition font-semibold ${
-                    isActive
-                      ? "text-primaryColor"
-                      : "text-text hover:text-primaryColor"
-                  }`
-                }
-              >
-                Donate
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  `text-lg transition font-semibold ${
-                    isActive
-                      ? "text-primaryColor"
-                      : "text-text hover:text-primaryColor"
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
-            </li>
 
-            {/* Conditionally render Login or Avatar */}
-            {!currentUser ? (
-              <li>
-                <button
-                  onClick={() =>
-                    updateState("openAuthModal", !state.openAuthModal)
-                  }
-                  type="button"
-                  className="flex items-center mt-2 md:mt-0  cursor-pointer text-lg text-white bg-primaryColor/80 hover:bg-primaryColor py-2 px-4 rounded-full transition font-semibold"
-                >
-                  <FaSignInAlt className="mr-2 animate-pulse" />{" "}
-                  <span>Login</span>
-                </button>
-              </li>
-            ) : (
-              <li className="relative">
-                <button
-                  onClick={() =>
-                    updateState("isDropdownOpen", !state.isDropdownOpen)
-                  }
-                  className="flex items-center cursor-pointer space-x-2 "
-                >
-                  <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
-                    <span className="font-medium text-3xl text-primaryColor">
-                      {currentUser.name.slice(0, 1)}
-                    </span>
-                  </div>
-                </button>
+        <ul
+          className={`md:flex md:space-x-6 items-center absolute md:static top-16 left-0 w-full md:w-auto bg-offWhite md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300 ease-in-out ${
+            state?.isOpenMobileMenu ? "block" : "hidden"
+          }`}
+        >
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
+            >
+              About
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/events"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
+            >
+              Events
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/donate"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
+            >
+              Donate
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                `text-lg transition font-semibold ${
+                  isActive
+                    ? "text-primaryColor"
+                    : "text-text hover:text-primaryColor"
+                }`
+              }
+            >
+              Contact
+            </NavLink>
+          </li>
 
-                {/* Dropdown Menu */}
-                {state.isDropdownOpen && (
-                  <DropdownMenu
-                    setState={setState}
-                    DropdownRef={DropdownRef}
-                    role={currentUser?.role}
-                  />
-                )}
-              </li>
-            )}
-          </ul>
-        )}
+          {/* Conditionally render Login or Avatar */}
+          {!currentUser ? (
+            <li>
+              <button
+                onClick={() =>
+                  updateState("openAuthModal", !state.openAuthModal)
+                }
+                type="button"
+                className="flex items-center mt-2 md:mt-0  cursor-pointer text-lg text-white bg-primaryColor/80 hover:bg-primaryColor py-2 px-4 rounded-full transition font-semibold"
+              >
+                <FaSignInAlt className="mr-2 animate-pulse" />{" "}
+                <span>Login</span>
+              </button>
+            </li>
+          ) : (
+            <li className="relative">
+              <button
+                onClick={() =>
+                  updateState("isDropdownOpen", !state.isDropdownOpen)
+                }
+                className="flex items-center cursor-pointer space-x-2 "
+              >
+                <div className="w-10 h-10 rounded-full bg-black flex justify-center items-center">
+                  <span className="font-medium text-3xl text-primaryColor">
+                    {currentUser.name.slice(0, 1)}
+                  </span>
+                </div>
+              </button>
+
+              {/* Dropdown Menu */}
+              {state.isDropdownOpen && (
+                <DropdownMenu
+                  setState={setState}
+                  DropdownRef={DropdownRef}
+                  role={currentUser?.role}
+                />
+              )}
+            </li>
+          )}
+        </ul>
       </div>
     </nav>
   );

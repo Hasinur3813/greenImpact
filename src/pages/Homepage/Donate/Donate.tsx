@@ -3,18 +3,16 @@ import { FaHandHoldingHeart } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm";
+import useEvents from "../../../hooks/useEvents";
+import { Event } from "../../../Types/Event";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
 
 const Donate: React.FC = () => {
   const [amount, setAmount] = useState<number | string>(50);
   const [selectedEvent, setSelectedEvent] = useState<string>("");
-
-  const events = [
-    "Tree Planting Drive",
-    "Beach Cleanup",
-    "Renewable Energy Workshop",
-  ];
+  const [message, setMessage] = useState<string>("");
+  const { events } = useEvents();
 
   return (
     <Elements stripe={stripePromise}>
@@ -37,9 +35,9 @@ const Donate: React.FC = () => {
             <option value="" disabled>
               Select an Event
             </option>
-            {events.map((event, index) => (
-              <option key={index} value={event}>
-                {event}
+            {events?.map((event: Event) => (
+              <option key={event._id} value={event.title}>
+                {event.title}
               </option>
             ))}
           </select>
@@ -75,12 +73,16 @@ const Donate: React.FC = () => {
           <textarea
             placeholder="Leave a message (optional)"
             className="mt-4 p-3 w-full border border-primaryColor rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor"
-            // onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => setMessage(e.target.value)}
           ></textarea>
 
           {/* Stripe Payment Card */}
           <div className="mt-6">
-            <CheckoutForm amount={Number(amount)} />
+            <CheckoutForm
+              amount={Number(amount)}
+              selectedEvent={selectedEvent}
+              message={message}
+            />
           </div>
         </div>
       </section>

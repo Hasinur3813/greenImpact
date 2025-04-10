@@ -1,15 +1,7 @@
 import { FaSearch, FaTrash } from "react-icons/fa";
 import Table from "../../../components/Table/Table";
+import { Donation } from "../../../Types/DonationTypes";
 
-interface Donation {
-  _id: string; // Unique identifier for the donation
-  donorName: string; // Name of the donor
-  amount: number; // Donation amount
-  eventTitle: string; // Title of the event associated with the donation
-  transactionId: string; // Transaction ID for the donation
-  date: string; // Date of the donation (ISO or formatted string)
-  action?: string; // Optional action key to align with the TableProps definition
-}
 interface Column<T> {
   key: keyof T | "action";
   label: string;
@@ -50,7 +42,7 @@ const columns: Column<Donation>[] = [
     label: "",
     render: (row: Donation) => (
       <button
-        onClick={() => handleDelete(row._id)}
+        onClick={() => handleDelete(row._id!)}
         className="text-red-500 hover:text-red-700"
       >
         <FaTrash />

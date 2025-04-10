@@ -1,16 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { User } from "../Types/User";
 interface loginData {
   email: string;
   password: string;
-}
-interface User {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: string;
 }
 
 interface asyncResponse {
@@ -44,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (res.data.success) {
           setUser(res.data.data.user);
+          // console.log(res.data.data.user);
         } else {
           setUser(null);
         }
