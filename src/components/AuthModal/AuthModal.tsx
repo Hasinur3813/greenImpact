@@ -16,12 +16,13 @@ interface loginData {
   email: string;
   password: string;
 }
+
 interface registerData {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  role: "donor" | "volunteer";
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ updateState }) => {

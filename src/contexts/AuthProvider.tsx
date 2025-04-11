@@ -10,13 +10,20 @@ interface loginData {
 interface asyncResponse {
   success: boolean;
 }
+interface registerData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: "donor" | "volunteer";
+}
 
 interface AuthContextProps {
   user: User | null;
   loading: boolean;
   setUser: (user: User | null) => void;
   logout: () => Promise<void>;
-  register: (userData: User) => Promise<asyncResponse>;
+  register: (userData: registerData) => Promise<asyncResponse>;
   login: (userData: loginData) => Promise<asyncResponse>;
 }
 
@@ -53,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchUser();
   }, [axiosSecure]);
 
-  const register = async (userData: User) => {
+  const register = async (userData: registerData) => {
     try {
       setLoading(true);
       const { data } = await axios.post("/auth/register", userData);

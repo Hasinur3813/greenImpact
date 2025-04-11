@@ -14,7 +14,7 @@ interface registerData {
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  role: "donor" | "volunteer";
 }
 
 const RegisterForm: React.FC<FormProps> = ({
