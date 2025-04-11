@@ -18,6 +18,7 @@ const Donations = () => {
   const { donations, isLoading, refetch } = useDonations();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [deletionId, setDeletionId] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
   const axios = useAxiosSecure();
 
   const handleDelete = async () => {
@@ -42,6 +43,15 @@ const Donations = () => {
     setIsModalOpen(true);
   };
 
+  // Filter donations based on the search input
+  const filteredDonations = donations?.filter((donation: Donation) => {
+    const searchLower = search.toLowerCase();
+    return (
+      donation.donor?.name?.toLowerCase().includes(searchLower) || // Match donor name
+      donation.donor?.email?.toLowerCase().includes(searchLower) || // Match donor email
+      donation.eventTitle?.toLowerCase().includes(searchLower) // Match event title
+    );
+  });
   const columns: Column<Donation>[] = [
     {
       key: "donorName",
@@ -84,6 +94,8 @@ const Donations = () => {
         <h2 className="text-2xl font-bold text-primaryColor">All Donations</h2>
         <div className="relative">
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             type="text"
             placeholder="Search donor or event..."
             className="border border-primaryColor rounded-lg pl-10 pr-4 py-2 focus:outline-none"
@@ -92,9 +104,9 @@ const Donations = () => {
         </div>
       </div>
 
-      <Table columns={columns} data={donations} />
+      <Table columns={columns} data={filteredDonations} />
 
-      {donations?.length === 0 && (
+      {filteredDonations?.length === 0 && (
         <div className="text-center text-gray-500 py-8">
           No donations found.
         </div>
