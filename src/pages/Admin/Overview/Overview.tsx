@@ -19,43 +19,27 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Loader from "../../../components/Loader/Loader";
 
 const COLORS = ["#00C49F", "#FF8042"];
 
 const Overview = () => {
-  // Dummy data
-  const summaryStats = {
-    users: 1200,
-    donations: 540,
-    events: 22,
-    avgDonation: 45,
-  };
+  const axios = useAxiosSecure();
 
-  const monthlyDonations = [
-    { month: "Jan", amount: 1200 },
-    { month: "Feb", amount: 2100 },
-    { month: "Mar", amount: 800 },
-    { month: "Apr", amount: 1600 },
-    { month: "May", amount: 2500 },
-  ];
+  const { data: overview, isLoading } = useQuery({
+    queryKey: ["adminOverview"],
+    queryFn: async () => {
+      const { data } = await axios.get("/admin/overview");
+      console.log(data.data);
+      return data.data;
+    },
+  });
 
-  const roleDistribution = [
-    { name: "Donors", value: 700 },
-    { name: "Volunteers", value: 500 },
-  ];
-
-  const recentUsers = [
-    { name: "Sarah Ahmed", role: "Donor" },
-    { name: "John Doe", role: "Volunteer" },
-    { name: "Emily Khan", role: "Donor" },
-  ];
-
-  const recentDonations = [
-    { name: "Sarah Ahmed", amount: 100, date: "2025-04-01" },
-    { name: "Emily Khan", amount: 200, date: "2025-04-02" },
-    { name: "Ali Raza", amount: 150, date: "2025-04-03" },
-  ];
-
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <section className="p-4 bg-gray-50 min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-primaryColor">
@@ -67,22 +51,22 @@ const Overview = () => {
         <SummaryCard
           icon={<FaUsers />}
           title="Total Users"
-          value={summaryStats.users}
+          value={overview?.summaryStats.users}
         />
         <SummaryCard
           icon={<FaDonate />}
           title="Total Donations"
-          value={`$${summaryStats.donations}`}
+          value={`$${overview?.summaryStats.totalDonations}`}
         />
         <SummaryCard
           icon={<FaCalendarAlt />}
           title="Total Events"
-          value={summaryStats.events}
+          value={overview?.summaryStats.events}
         />
         <SummaryCard
           icon={<FaMoneyBillWave />}
           title="Avg Donations"
-          value={`$${summaryStats.avgDonation}`}
+          value={`$${overview?.summaryStats.avgDonation}`}
         />
       </div>
 
@@ -92,7 +76,7 @@ const Overview = () => {
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-4">Monthly Donations</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={monthlyDonations}>
+            <BarChart data={overview?.donations.monthlyDonations}>
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
@@ -107,7 +91,7 @@ const Overview = () => {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={roleDistribution}
+                data={overview?.roleDistribution}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
@@ -115,7 +99,7 @@ const Overview = () => {
                 outerRadius={100}
                 label
               >
-                {roleDistribution.map((_, index) => (
+                {overview?.roleDistribution.map((_: unknown, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -133,7 +117,7 @@ const Overview = () => {
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-4">Recent Users</h3>
           <ul className="space-y-3">
-            {recentUsers.map((user, i) => (
+            {overview?.recentUsers.map((user, i) => (
               <li key={i} className="flex justify-between">
                 <span>{user.name}</span>
                 <span className="text-sm bg-gray-200 px-2 py-1 rounded-full">
@@ -147,10 +131,11 @@ const Overview = () => {
         <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-4">Recent Donations</h3>
           <ul className="space-y-3">
-            {recentDonations.map((donation, i) => (
+            {overview?.donations.recentDonations.map((donation, i) => (
               <li key={i} className="flex justify-between">
-                <span>{donation.name}</span>
+                <span>{donation.donor.name}</span>
                 <span>${donation.amount}</span>
+                <span>${donation.transactionId.slice(0, 15)}...</span>
               </li>
             ))}
           </ul>
