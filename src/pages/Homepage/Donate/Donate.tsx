@@ -36,7 +36,11 @@ const Donate: React.FC = () => {
 
           {/* Event Selection */}
           <select
-            className="mt-4 w-full px-4 py-2 border border-primaryColor rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor"
+            className={`mt-4 w-full px-4 py-2 border ${
+              selectedEvent
+                ? "border-primaryColor focus:ring-primaryColor"
+                : "border-red focus:ring-red"
+            } rounded-lg focus:outline-none focus:ring-2 `}
             value={selectedEvent}
             onChange={(e) => setSelectedEvent(e.target.value)}
           >
@@ -85,7 +89,11 @@ const Donate: React.FC = () => {
             min="1"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="mt-4 w-full px-4 py-3 border border-primaryColor rounded-lg text-lg text-center focus:outline-none focus:ring-2 focus:ring-primaryColor"
+            className={`mt-4 w-full px-4 py-2 border ${
+              amount
+                ? "border-primaryColor focus:ring-primaryColor"
+                : "border-red focus:ring-red"
+            } rounded-lg focus:outline-none focus:ring-2 `}
             placeholder="Enter custom amount"
           />
           {error?.amountError && (
