@@ -150,7 +150,13 @@ const Overview = () => {
               ) => (
                 <li key={i} className="flex justify-between">
                   <span>{user.name}</span>
-                  <span className="text-sm bg-gray-200 px-2 py-1 rounded-full">
+                  <span
+                    className={`text-sm ${
+                      user.role === "volunteer"
+                        ? "bg-amber-500"
+                        : "bg-primaryColor"
+                    } px-2 py-1 rounded-full text-white`}
+                  >
                     {user.role}
                   </span>
                 </li>
@@ -175,7 +181,7 @@ const Overview = () => {
                 <li key={i} className="flex justify-between">
                   <span>{donation.donor.name}</span>
                   <span>${donation.amount}</span>
-                  <span>${donation.transactionId.slice(0, 15)}...</span>
+                  <span>${donation.transactionId.slice(1, 15)}...</span>
                 </li>
               )
             )}

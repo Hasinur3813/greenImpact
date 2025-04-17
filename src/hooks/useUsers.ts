@@ -11,7 +11,7 @@ const useUsers = () => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data } = await axios.get("/auth/get-all-users");
+      const { data } = await axios.get("/admin/get-all-users");
 
       return data.data.users;
     },

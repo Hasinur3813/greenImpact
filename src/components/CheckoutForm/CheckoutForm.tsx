@@ -69,7 +69,6 @@ const CheckoutForm: React.FC<donationProps> = ({
         if (data.success) {
           toast.success(data?.message || "Thank you for you support!");
           setTransactionId(paymentMethod.id);
-
           setIsModalOpen(true);
         } else {
           toast.error("Something went wrong!");

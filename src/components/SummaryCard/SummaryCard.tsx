@@ -3,13 +3,15 @@ const SummaryCard = ({
   icon,
   title,
   value,
+  className,
 }: {
   icon: React.ReactNode;
   title: string;
   value: string | number;
+  className?: string;
 }) => (
   <motion.div
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4"
+    className={`${className} bg-white p-6 rounded-xl shadow-md flex items-center gap-4`}
     whileHover={{ scale: 1.02 }}
     transition={{ duration: 0.2 }}
   >

@@ -25,7 +25,7 @@ const ManageUsers = () => {
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
       const { data } = await axios.patch(
-        `/auth/change-user-role?id=${userId}&role=${newRole}`
+        `/admin/change-user-role?id=${userId}&role=${newRole}`
       );
       if (data.success) {
         toast.success("User role has been changed!");

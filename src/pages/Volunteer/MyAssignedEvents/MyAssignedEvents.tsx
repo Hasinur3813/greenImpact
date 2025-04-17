@@ -1,97 +1,153 @@
-import { useState, useEffect } from "react";
-import { FaCheckCircle, FaTimesCircle, FaEye } from "react-icons/fa";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FaSearch, FaClock, FaMapMarkerAlt, FaUserTie } from "react-icons/fa";
+import SummaryCard from "../../../components/SummaryCard/SummaryCard";
+import { FiList } from "react-icons/fi";
+import { MdUpcoming } from "react-icons/md";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { BsClockHistory } from "react-icons/bs";
 
-const MyAssignedEvents = () => {
-  interface Event {
-    id: string;
-    title: string;
-    date: string;
-    location: string;
-    status: string;
-  }
+const events = [
+  {
+    _id: "1",
+    title: "Beach Cleanup Drive",
+    description: "Join hands to clean the coastal area.",
+    location: "Cox’s Bazar, Bangladesh",
+    organizer: "GreenImpact Org",
+    time: "April 21, 2025 - 9:00 AM",
+    volunteersNeeded: 20,
+    image: "https://i.ibb.co/vJbG0W9/beach-cleanup.jpg",
+    status: "Upcoming",
+  },
+  {
+    _id: "2",
+    title: "Tree Plantation",
+    description: "Let's make our city greener.",
+    location: "Dhaka University",
+    organizer: "GreenImpact Team",
+    time: "April 25, 2025 - 10:30 AM",
+    volunteersNeeded: 15,
+    image: "https://i.ibb.co/z6jFhDR/tree-plant.jpg",
+    status: "Ongoing",
+  },
+];
 
-  const [assignedEvents, setAssignedEvents] = useState<Event[]>([]);
-
-  useEffect(() => {
-    // Simulate fetching assigned events
-    setAssignedEvents([
-      {
-        id: "1",
-        title: "Tree Plantation",
-        date: "2025-05-10",
-        location: "Dhaka",
-        status: "upcoming",
-      },
-      {
-        id: "2",
-        title: "Beach Cleanup",
-        date: "2025-04-20",
-        location: "Cox's Bazar",
-        status: "attended",
-      },
-      {
-        id: "3",
-        title: "Climate Awareness Campaign",
-        date: "2025-06-15",
-        location: "Chittagong",
-        status: "upcoming",
-      },
-    ]);
-  }, []);
-
-  return (
-    <section className="p-4 ">
-      <h2 className="text-4xl font-extrabold text-primaryColor mb-8">
-        My Assigned Events
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {assignedEvents.map((event) => (
-          <div
-            key={event.id}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 duration-300"
-          >
-            <h3 className="text-2xl font-semibold text-primaryColor mb-2">
-              {event.title}
-            </h3>
-            <p className="text-lg text-gray-700 mb-4">
-              {event.date} - {event.location}
-            </p>
-
-            <div className="flex justify-between items-center">
-              <p
-                className={`font-semibold text-lg ${
-                  event.status === "attended"
-                    ? "text-green-600"
-                    : "text-yellow-500"
-                }`}
-              >
-                {event.status === "attended" ? (
-                  <>
-                    <FaCheckCircle className="inline-block mr-2 text-green-600" />
-                    Attended
-                  </>
-                ) : (
-                  <>
-                    <FaTimesCircle className="inline-block mr-2 text-yellow-500" />
-                    Upcoming
-                  </>
-                )}
-              </p>
-              <button className="px-6 py-2 text-white bg-gradient-to-r from-green-400 via-teal-500 to-cyan-600 rounded-full hover:scale-110 transform transition duration-300">
-                <FaEye className="inline-block mr-2" /> View Details
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {assignedEvents.length === 0 && (
-        <div className="text-center text-gray-500 py-8">
-          No events assigned yet. Stay tuned for upcoming events!
-        </div>
-      )}
-    </section>
-  );
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  }),
 };
 
-export default MyAssignedEvents;
+export default function MyAssignedEvents() {
+  const [search, setSearch] = useState("");
+
+  const filtered = events.filter((event) =>
+    event.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <section className="py-14">
+      <div className="container px-4 mx-auto">
+        <h2 className="text-3xl font-bold text-primaryColor mb-6">
+          My Assigned Events
+        </h2>
+
+        {/* Summary */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
+          <SummaryCard title="Total Events" value={"5"} icon={<FiList />} />
+          <SummaryCard title="Upcoming" value={"2"} icon={<MdUpcoming />} />
+          <SummaryCard title="Ongoing" value={"1"} icon={<BsClockHistory />} />
+          <SummaryCard
+            title="Completed"
+            value={"2"}
+            icon={<AiOutlineCheckCircle />}
+          />
+        </div>
+
+        {/* Search */}
+        <div className="flex items-center gap-2 bg-white p-3 rounded-lg mb-6 shadow-sm border border-gray-200">
+          <FaSearch className="text-muted" />
+          <input
+            type="text"
+            placeholder="Search events..."
+            className="w-full outline-none text-sm bg-transparent"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* Events */}
+        {filtered.length ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((event, i) => (
+              <motion.div
+                key={event._id}
+                custom={i * 0.5}
+                initial="hidden"
+                animate="visible"
+                variants={cardVariants}
+                className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
+              >
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="h-40 w-full object-cover"
+                />
+
+                <div className="p-4 flex flex-col h-full">
+                  <h3 className="text-xl font-semibold text-text mb-1">
+                    {event.title}
+                  </h3>
+                  <p className="text-sm text-muted mb-3">{event.description}</p>
+                  <div className="text-sm text-muted flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                      <FaClock className="text-primaryColor" />
+                      <span>{event.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaMapMarkerAlt className="text-primaryColor" />
+                      <span>{event.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaUserTie className="text-primaryColor" />
+                      <span>{event.organizer}</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex justify-between items-center">
+                    <span className="px-3 py-1 text-xs rounded-full bg-secondaryColor/20 text-secondaryColor">
+                      {event.status}
+                    </span>
+                    <button className="text-sm text-white bg-primaryColor px-3 py-1 rounded-lg hover:bg-green-700 transition-all">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-center mt-20"
+          >
+            <h3 className="text-xl text-muted mb-3">
+              No assigned events found
+            </h3>
+            <p className="text-sm text-gray-500">
+              Join new events from the explore section.
+            </p>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+}
